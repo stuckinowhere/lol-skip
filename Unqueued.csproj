@@ -13,6 +13,7 @@
     <AssemblyTitle>Unqueued</AssemblyTitle>
     <Description>Count the days you are not playing League of Legends, and keep the client closed until you Pass.</Description>
     <RootNamespace>Unqueued</RootNamespace>
+    <DefaultItemExcludes>$(DefaultItemExcludes);Unqueued.Tests/**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
