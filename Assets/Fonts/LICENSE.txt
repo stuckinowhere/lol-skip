@@ -1,0 +1,7 @@
+Cinzel
+Copyright 2012 Natanael Gama (info@ndiscovered.com), with Reserved Font Name 'Cinzel'
+SIL Open Font License 1.1 — https://scripts.sil.org/OFL
+
+IBM Plex Sans
+Copyright © 2017 IBM Corp. with Reserved Font Name 'Plex'
+SIL Open Font License 1.1 — https://scripts.sil.org/OFL

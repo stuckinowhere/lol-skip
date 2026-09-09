@@ -1,0 +1,97 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Unqueued.App"
+             RequestedThemeVariant="Dark">
+
+    <Application.Resources>
+        <FontFamily x:Key="Cinzel">avares://Unqueued/Assets/Fonts/Cinzel-Regular.ttf#Cinzel, avares://Unqueued/Assets/Fonts/Cinzel-Bold.ttf#Cinzel</FontFamily>
+        <FontFamily x:Key="Plex">avares://Unqueued/Assets/Fonts/IBMPlexSans-Regular.ttf#IBM Plex Sans, avares://Unqueued/Assets/Fonts/IBMPlexSans-Medium.ttf#IBM Plex Sans</FontFamily>
+        <Color x:Key="Ink">#010A13</Color>
+        <Color x:Key="Bone">#F0E6D2</Color>
+        <Color x:Key="Gold">#C8AA6E</Color>
+        <SolidColorBrush x:Key="InkBrush" Color="{StaticResource Ink}" />
+        <SolidColorBrush x:Key="BoneBrush" Color="{StaticResource Bone}" />
+        <SolidColorBrush x:Key="GoldBrush" Color="{StaticResource Gold}" />
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <Style Selector="Window">
+            <Setter Property="FontFamily" Value="{StaticResource Plex}" />
+            <Setter Property="Foreground" Value="{StaticResource BoneBrush}" />
+            <Setter Property="Background" Value="{StaticResource InkBrush}" />
+        </Style>
+
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{StaticResource BoneBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource GoldBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="16,13" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{StaticResource Plex}" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#16110A" />
+            <Setter Property="BorderBrush" Value="#F0E6D2" />
+            <Setter Property="Foreground" Value="#F0E6D2" />
+        </Style>
+        <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#C8AA6E" />
+            <Setter Property="Foreground" Value="#010A13" />
+        </Style>
+
+        <Style Selector="Button.quiet">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{StaticResource GoldBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="8,6" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{StaticResource Plex}" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Opacity" Value="0.75" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+        <Style Selector="Button.quiet:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#F0E6D2" />
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+
+        <Style Selector="Button.icon">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+        <Style Selector="Button.icon:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#16110A" />
+        </Style>
+    </Application.Styles>
+
+    <TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="/Assets/unqueued.ico"
+                      ToolTipText="Unqueued — days without League"
+                      Clicked="OnTrayClicked">
+                <TrayIcon.Menu>
+                    <NativeMenu>
+                        <NativeMenuItem Header="Open" Click="OnOpenRitual" />
+                        <NativeMenuItem Header="Pass" Click="OnPassFromTray" />
+                        <NativeMenuItemSeparator />
+                        <NativeMenuItem Header="Quit — stops protection" Click="OnQuit" />
+                    </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
+</Application>
