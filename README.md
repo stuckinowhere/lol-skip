@@ -4,9 +4,13 @@ A Windows 11 app you run **on your PC**. It counts days without League of Legend
 
 ## Install
 
-Download the latest **win-x64 zip** from [Releases](https://github.com/stuckinowhere/lol-skip/releases), unzip it, and run `WasdLolSkip.exe`. The first launch copies itself to `%LocalAppData%\WasdLolSkip` and registers one Windows startup entry.
+Download **`wasdlol-skip-*-win-x64-setup.exe`** from [Releases](https://github.com/stuckinowhere/lol-skip/releases) and run it.
 
-A `v1.0.0` tag produces a GitHub Release with `wasdlol-skip-v1.0.0-win-x64.zip`.
+The installer is per-user (no admin prompt). It includes the .NET runtime, so you do **not** install the .NET SDK. It places the app in `%LocalAppData%\WasdLolSkip`, adds a Start Menu shortcut, and can start at Windows sign-in. Uninstall from **Settings → Apps**.
+
+64-bit Windows 10 (1809 or later) or Windows 11.
+
+A portable zip (`wasdlol-skip-*-win-x64.zip`) is also on each release if you would rather not use Setup.
 
 ## Build from source
 
@@ -75,4 +79,10 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-That runs `.github/workflows/release.yml`, which tests, publishes a self-contained `win-x64` exe, and creates a GitHub Release with `wasdlol-skip-v1.0.0-win-x64.zip`. Later versions are `v1.0.1`, `v1.1.0`, and so on.
+That runs `.github/workflows/release.yml`, which tests, publishes a self-contained win-x64 build, and creates a GitHub Release with `wasdlol-skip-v1.0.0-win-x64-setup.exe` (installer) and `wasdlol-skip-v1.0.0-win-x64.zip`. Later versions are `v1.0.1`, `v1.1.0`, and so on.
+
+To build the installer locally (needs [Inno Setup 6](https://jrsoftware.org/isinfo.php)):
+
+```powershell
+.\installer\build-installer.ps1
+```
