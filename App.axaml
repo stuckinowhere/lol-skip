@@ -4,14 +4,24 @@
              RequestedThemeVariant="Dark">
 
     <Application.Resources>
-        <FontFamily x:Key="Cinzel">avares://Unqueued/Assets/Fonts/Cinzel-Regular.ttf#Cinzel, avares://Unqueued/Assets/Fonts/Cinzel-Bold.ttf#Cinzel</FontFamily>
-        <FontFamily x:Key="Plex">avares://Unqueued/Assets/Fonts/IBMPlexSans-Regular.ttf#IBM Plex Sans, avares://Unqueued/Assets/Fonts/IBMPlexSans-Medium.ttf#IBM Plex Sans</FontFamily>
-        <Color x:Key="Ink">#010A13</Color>
-        <Color x:Key="Bone">#F0E6D2</Color>
-        <Color x:Key="Gold">#C8AA6E</Color>
-        <SolidColorBrush x:Key="InkBrush" Color="{StaticResource Ink}" />
-        <SolidColorBrush x:Key="BoneBrush" Color="{StaticResource Bone}" />
-        <SolidColorBrush x:Key="GoldBrush" Color="{StaticResource Gold}" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Unqueued/Assets/Marks.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="Cinzel">avares://Unqueued/Assets/Fonts/Cinzel-Regular.ttf#Cinzel, avares://Unqueued/Assets/Fonts/Cinzel-Bold.ttf#Cinzel</FontFamily>
+            <FontFamily x:Key="Plex">avares://Unqueued/Assets/Fonts/IBMPlexSans-Regular.ttf#IBM Plex Sans, avares://Unqueued/Assets/Fonts/IBMPlexSans-Medium.ttf#IBM Plex Sans</FontFamily>
+            <Color x:Key="Ink">#010A13</Color>
+            <Color x:Key="Bone">#F0E6D2</Color>
+            <Color x:Key="Gold">#C8AA6E</Color>
+            <SolidColorBrush x:Key="InkBrush" Color="{StaticResource Ink}" />
+            <SolidColorBrush x:Key="BoneBrush" Color="{StaticResource Bone}" />
+            <SolidColorBrush x:Key="GoldBrush" Color="{StaticResource Gold}" />
+            <LinearGradientBrush x:Key="GoldGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#F0E6D2" Offset="0" />
+                <GradientStop Color="#C8AA6E" Offset="0.55" />
+                <GradientStop Color="#785A28" Offset="1" />
+            </LinearGradientBrush>
+        </ResourceDictionary>
     </Application.Resources>
 
     <Application.Styles>

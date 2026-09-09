@@ -52,4 +52,4 @@ State lives in `%AppData%\Unqueued\state.json`.
 
 ## Design
 
-Client dark `#010A13`, bone `#F0E6D2`, gold `#C8AA6E`. Cinzel + IBM Plex Sans (SIL OFL). No Riot marks or client fonts.
+Client dark `#010A13`, bone `#F0E6D2`, gold `#C8AA6E`. Hex ring, lane marks, and shield/swords/potion glyphs are original geometry — not Riot art. Cinzel + IBM Plex Sans (SIL OFL).
