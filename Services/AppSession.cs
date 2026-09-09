@@ -48,7 +48,7 @@ public sealed class AppSession : IDisposable
         Window.Closing += OnWindowClosing;
         _desktop.MainWindow = Window;
 
-        if (Store.HasDecidedToday)
+        if (Store.HasDecidedToday && LaunchedAtWindowsSignIn())
             Window.Opened += HideOnceOpened;
 
         _clock = new DispatcherTimer { Interval = TimeSpan.FromSeconds(15) };
@@ -135,6 +135,10 @@ public sealed class AppSession : IDisposable
                 Dispatcher.UIThread.Post(ShowRitual);
         }
     }
+
+    private static bool LaunchedAtWindowsSignIn() =>
+        Environment.GetCommandLineArgs().Any(argument =>
+            string.Equals(argument, SingleInstance.StartupArgument, StringComparison.OrdinalIgnoreCase));
 
     private void HideOnceOpened(object? sender, EventArgs e)
     {
