@@ -1,72 +1,70 @@
 # wasdlol skip
 
-A Windows 11 app you run **on your PC**. It counts days without League of Legends, starts at login (ahead of typical Riot Client startup), and keeps League closed unless you Play.
+<p align="left">
+  <img src="Assets/unqueued.png" width="72" height="72" alt="wasdlol skip mark">
+</p>
+
+Count the days you are not playing League of Legends. **Skip** locks the client until tomorrow. **Play** lets Riot start.
+
+Windows 11, gold-on-ink tray app. The day count is stored on this PC and survives restarts.
 
 ## Install
 
-Download the latest **win-x64 zip** from [Releases](https://github.com/stuckinowhere/lol-skip/releases), unzip it, and run `WasdLolSkip.exe`. The first launch copies itself to `%LocalAppData%\WasdLolSkip` and registers one Windows startup entry.
+1. Download `wasdlol-skip-v*-win-x64.zip` from [Releases](https://github.com/stuckinowhere/lol-skip/releases).
+2. Unzip and run `WasdLolSkip.exe`.
+3. No .NET install is required — the zip is self-contained.
 
-Tagged builds look like [tgrep](https://github.com/microsoft/tgrep/releases): a `v1.0.0` tag produces a GitHub Release with `wasdlol-skip-v1.0.0-win-x64.zip` and `checksums.txt`.
+The first launch copies the app to `%LocalAppData%\WasdLolSkip` and adds one Windows startup entry so it can run at login, before a typical Riot Client start. You can turn that entry off in **Settings → Apps → Startup**.
+
+## What it does
+
+At login (or when you open the app) you get the day count.
+
+| Action | Result |
+| --- | --- |
+| **Skip lol today** | Closes League / Riot Client / Vanguard tray, locks them until tomorrow, hides to the tray. Play is disabled for the rest of the day. |
+| **Play** | Unlocks League until local midnight and starts Riot Client / Vanguard if they are set to launch with Windows. No extra confirm. |
+| **Minimize / close** | Minimize stays in the taskbar. Close hides to the tray; protection keeps running. |
+| **Quit** (tray) | Exits the app. League can run again. |
+
+The streak lives in `%AppData%\Unqueued\state.json`.
+
+## Tray
+
+- **Open** — show the window
+- **Skip lol today** / **Play** — same as the window (Play is disabled after a skip)
+- **Quit — stops protection** — exits
 
 ## Build from source
 
-1. Install the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (x64).
-2. Get this repo onto the machine (clone, or download the ZIP and unzip it).
-3. In that folder, either:
-
-**Local publish — a real `WasdLolSkip.exe` that starts with Windows**
-
-Right-click `publish-windows.ps1` → **Run with PowerShell**.  
-Or from PowerShell:
+Install the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (x64), clone this repo, then:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
 .\publish-windows.ps1
 ```
 
-That builds `publish\win-x64\WasdLolSkip.exe` and launches it. The first time it starts, it copies itself to `%LocalAppData%\WasdLolSkip` and writes one HKCU Run entry (`--startup`) so it can run before Riot Client. It does not add a scheduled task or Startup-folder shortcut.
+That writes `publish\win-x64\WasdLolSkip.exe` and launches it.
 
-**Dev loop**
+Dev loop:
 
 ```powershell
 .\run-windows.ps1
 ```
 
-`dotnet run` does **not** add itself to startup (it would register the SDK, not the app). Use the published exe for the real daily setup.
-
-If PowerShell blocks scripts: `Set-ExecutionPolicy -Scope Process Bypass`.
-
-## What it does
-
-At login you get a gold-on-black window with the day count.
-
-- **Skip lol today** — close League / Riot Client processes, lock them until tomorrow, hide to the tray. Play is disabled for the rest of the day.
-- **Play** — no extra confirm. Allows League, and starts Riot Client / Vanguard if they are set to launch at Windows logon.
-- There is no close button. **Quit** from the tray stops protection.
-
-While locked it kills League and Riot Client processes if they are already running.
-
-The day count lives in `%AppData%\Unqueued\state.json` and **survives restarts**.
-
-## Tray
-
-- **Open** — show the window
-- **Skip lol today** / **Play** — same as the window
-- **Quit — stops protection** — exits; League can run again
+`dotnet run` does **not** register startup (it would point Windows at the SDK, not the app). Use the published exe or a Release zip for daily use.
 
 ## Design
 
-Client dark `#010A13`, bone `#F0E6D2`, gold `#C8AA6E`. House brand is **WASD** (hex + WASD keys). Reuse it from [`Brand/`](Brand/README.md). Cinzel + IBM Plex Sans (SIL OFL). Lane marks are original geometry, not Riot art.
+Ink `#010A13`, bone `#F0E6D2`, gold `#C8AA6E`. House brand is **WASD**. Reuse it from [`Brand/`](Brand/README.md). Cinzel + IBM Plex Sans (SIL OFL). Marks are original geometry, not Riot art.
 
 ## Cutting a release
 
-After this branch is on `main`:
+On `main`:
 
 ```powershell
-git checkout main
-git pull
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
-That runs `.github/workflows/release.yml`, which tests, publishes a self-contained `win-x64` exe, and creates a GitHub Release with `wasdlol-skip-v1.0.0-win-x64.zip` plus `checksums.txt`. Later versions are `v1.0.1`, `v1.1.0`, and so on.
+GitHub Actions tests, publishes a self-contained win-x64 build, and opens a Release with `wasdlol-skip-v1.0.0-win-x64.zip` and `checksums.txt`.

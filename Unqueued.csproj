@@ -12,7 +12,7 @@
     <Version>1.0.0</Version>
     <Product>wasdlol skip</Product>
     <AssemblyTitle>wasdlol skip</AssemblyTitle>
-    <Description>Count the days you are not playing League of Legends, and keep the client closed until you Play.</Description>
+    <Description>Count days without League of Legends. Skip locks the client until tomorrow; Play lets Riot start.</Description>
     <RootNamespace>Unqueued</RootNamespace>
     <DefaultItemExcludes>$(DefaultItemExcludes);Unqueued.Tests/**</DefaultItemExcludes>
   </PropertyGroup>
