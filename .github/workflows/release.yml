@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Build and publish Windows release
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Test
+        run: dotnet test Unqueued.sln -c Release --nologo
+
+      - name: Publish win-x64 zip
+        shell: pwsh
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $version = $tag.TrimStart("v")
+          $out = "artifacts/win-x64"
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+
+          dotnet publish Unqueued.csproj -c Release -r win-x64 --self-contained true `
+            /p:PublishSingleFile=true `
+            /p:IncludeNativeLibrariesForSelfExtract=true `
+            /p:DebugType=none `
+            /p:Version=$version `
+            /p:InformationalVersion=$tag `
+            -o $out
+
+          Copy-Item Assets/unqueued.ico "$out/WasdLolSkip.ico" -Force
+          Copy-Item README.md $out -Force
+
+          $zip = "wasdlol-skip-$tag-win-x64.zip"
+          Compress-Archive -Path "$out\*" -DestinationPath $zip -Force
+          $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()
+          Set-Content -Path checksums.txt -Value "$hash  $zip" -NoNewline
+          Add-Content -Path checksums.txt -Value ""
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            wasdlol-skip-*.zip
+            checksums.txt
