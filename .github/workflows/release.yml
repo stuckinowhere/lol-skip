@@ -42,14 +42,9 @@ jobs:
 
           $zip = "wasdlol-skip-$tag-win-x64.zip"
           Compress-Archive -Path "$out\*" -DestinationPath $zip -Force
-          $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()
-          Set-Content -Path checksums.txt -Value "$hash  $zip" -NoNewline
-          Add-Content -Path checksums.txt -Value ""
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
-          files: |
-            wasdlol-skip-*.zip
-            checksums.txt
+          files: wasdlol-skip-*.zip

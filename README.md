@@ -6,7 +6,7 @@ A Windows 11 app you run **on your PC**. It counts days without League of Legend
 
 Download the latest **win-x64 zip** from [Releases](https://github.com/stuckinowhere/lol-skip/releases), unzip it, and run `WasdLolSkip.exe`. The first launch copies itself to `%LocalAppData%\WasdLolSkip` and registers one Windows startup entry.
 
-Tagged builds look like [tgrep](https://github.com/microsoft/tgrep/releases): a `v1.0.0` tag produces a GitHub Release with `wasdlol-skip-v1.0.0-win-x64.zip` and `checksums.txt`.
+A `v1.0.0` tag produces a GitHub Release with `wasdlol-skip-v1.0.0-win-x64.zip`.
 
 ## Build from source
 
@@ -69,4 +69,4 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-That runs `.github/workflows/release.yml`, which tests, publishes a self-contained `win-x64` exe, and creates a GitHub Release with `wasdlol-skip-v1.0.0-win-x64.zip` plus `checksums.txt`. Later versions are `v1.0.1`, `v1.1.0`, and so on.
+That runs `.github/workflows/release.yml`, which tests, publishes a self-contained `win-x64` exe, and creates a GitHub Release with `wasdlol-skip-v1.0.0-win-x64.zip`. Later versions are `v1.0.1`, `v1.1.0`, and so on.
