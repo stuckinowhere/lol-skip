@@ -1,19 +1,18 @@
 # WASD brand kit
 
-House mark for Unqueued, wasdlol, and other apps in this family.
+House mark for wasdlol skip and other apps in this family.
 
-Not Riot art. Hex + WASD keys, colored from [palette 8528](https://www.color-hex.com/color-palette/8528).
+Not Riot art. Hex + WASD keys, colored from the gold-on-ink palette.
 
 ## Palette
 
-| Token  | Hex       | Use                          |
-|--------|-----------|------------------------------|
-| mint   | `#0AC8B9` | borders, highlight, the mark |
-| teal   | `#0397AB` | secondary labels             |
-| deep   | `#005A82` | hex fill, button press       |
-| panel  | `#0A323C` | cards, inner chrome          |
-| ink    | `#091428` | window background            |
-| text   | `#E8FBFA` | body copy (not in the 5)     |
+| Token | Hex       | Use                          |
+|-------|-----------|------------------------------|
+| ink   | `#010A13` | window background, hex fill  |
+| bone  | `#F0E6D2` | body copy, number highlight  |
+| gold  | `#C8AA6E` | borders, labels, the mark    |
+| panel | `#070B12` | inner chrome                 |
+| key   | `#16110A` | WASD key fill                |
 
 ## Files to copy
 
@@ -22,4 +21,4 @@ Not Riot art. Hex + WASD keys, colored from [palette 8528](https://www.color-hex
 - `../Controls/WasdMark.cs` — Avalonia control (hex + keys, compact W under 26px)
 - `colors.json` — tokens
 
-In another app, set the window background to ink, strokes to mint, and drop `<WasdMark Width="22" Height="22"/>` in the chrome.
+In another app, set the window background to ink, strokes to gold, and drop `<WasdMark Width="22" Height="22"/>` in the chrome.

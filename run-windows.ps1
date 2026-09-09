@@ -1,4 +1,4 @@
-# Run Unqueued on this Windows PC (dev mode).
+# Run wasdlol skip on this Windows PC (dev mode).
 # For login startup + a single exe, use publish-windows.ps1 instead.
 
 $ErrorActionPreference = "Stop"

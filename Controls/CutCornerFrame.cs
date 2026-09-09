@@ -7,7 +7,7 @@ namespace Unqueued.Controls;
 public sealed class CutCornerFrame : Decorator
 {
     public static readonly StyledProperty<IBrush?> StrokeProperty =
-        AvaloniaProperty.Register<CutCornerFrame, IBrush?>(nameof(Stroke), new SolidColorBrush(Color.Parse("#0AC8B9")));
+        AvaloniaProperty.Register<CutCornerFrame, IBrush?>(nameof(Stroke), new SolidColorBrush(Color.Parse("#C8AA6E")));
 
     public static readonly StyledProperty<IBrush?> FillProperty =
         AvaloniaProperty.Register<CutCornerFrame, IBrush?>(nameof(Fill));
@@ -24,6 +24,7 @@ public sealed class CutCornerFrame : Decorator
     static CutCornerFrame()
     {
         AffectsRender<CutCornerFrame>(StrokeProperty, FillProperty, StrokeThicknessProperty, CutSizeProperty, ShowCornerMarksProperty);
+        AffectsArrange<CutCornerFrame>(CutSizeProperty);
     }
 
     public IBrush? Stroke
@@ -56,6 +57,12 @@ public sealed class CutCornerFrame : Decorator
         set => SetValue(ShowCornerMarksProperty, value);
     }
 
+    protected override Size ArrangeOverride(Size finalSize)
+    {
+        Clip = CreateGeometry(finalSize.Width, finalSize.Height, CutSize);
+        return base.ArrangeOverride(finalSize);
+    }
+
     public override void Render(DrawingContext context)
     {
         var w = Bounds.Width;
@@ -63,20 +70,8 @@ public sealed class CutCornerFrame : Decorator
         if (w <= 0 || h <= 0)
             return;
 
-        var cut = Math.Min(CutSize, Math.Min(w, h) / 3);
-        var geometry = new StreamGeometry();
-        using (var ctx = geometry.Open())
-        {
-            ctx.BeginFigure(new Point(cut, 0.5), true);
-            ctx.LineTo(new Point(w - cut, 0.5));
-            ctx.LineTo(new Point(w - 0.5, cut));
-            ctx.LineTo(new Point(w - 0.5, h - cut));
-            ctx.LineTo(new Point(w - cut, h - 0.5));
-            ctx.LineTo(new Point(cut, h - 0.5));
-            ctx.LineTo(new Point(0.5, h - cut));
-            ctx.LineTo(new Point(0.5, cut));
-            ctx.EndFigure(true);
-        }
+        var cut = EffectiveCut(w, h, CutSize);
+        var geometry = CreateGeometry(w, h, cut, inset: StrokeThickness / 2);
 
         if (Fill is not null)
             context.DrawGeometry(Fill, null, geometry);
@@ -92,6 +87,31 @@ public sealed class CutCornerFrame : Decorator
         DrawDiamond(context, cut, h - cut * 0.45);
         DrawDiamond(context, w - cut, h - cut * 0.45);
     }
+
+    public static StreamGeometry CreateGeometry(double width, double height, double cut, double inset = 0)
+    {
+        cut = EffectiveCut(width, height, cut);
+        var left = inset;
+        var top = inset;
+        var right = width - inset;
+        var bottom = height - inset;
+
+        var geometry = new StreamGeometry();
+        using var ctx = geometry.Open();
+        ctx.BeginFigure(new Point(left + cut, top), true);
+        ctx.LineTo(new Point(right - cut, top));
+        ctx.LineTo(new Point(right, top + cut));
+        ctx.LineTo(new Point(right, bottom - cut));
+        ctx.LineTo(new Point(right - cut, bottom));
+        ctx.LineTo(new Point(left + cut, bottom));
+        ctx.LineTo(new Point(left, bottom - cut));
+        ctx.LineTo(new Point(left, top + cut));
+        ctx.EndFigure(true);
+        return geometry;
+    }
+
+    private static double EffectiveCut(double width, double height, double cut) =>
+        Math.Min(cut, Math.Min(width, height) / 3);
 
     private void DrawDiamond(DrawingContext context, double x, double y)
     {

@@ -7,7 +7,7 @@ namespace Unqueued.Controls;
 public sealed class HexRing : Control
 {
     public static readonly StyledProperty<IBrush?> StrokeProperty =
-        AvaloniaProperty.Register<HexRing, IBrush?>(nameof(Stroke), new SolidColorBrush(Color.Parse("#0AC8B9")));
+        AvaloniaProperty.Register<HexRing, IBrush?>(nameof(Stroke), new SolidColorBrush(Color.Parse("#C8AA6E")));
 
     public static readonly StyledProperty<double> StrokeThicknessProperty =
         AvaloniaProperty.Register<HexRing, double>(nameof(StrokeThickness), 1.2);

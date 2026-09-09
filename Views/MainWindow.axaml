@@ -8,221 +8,123 @@
         d:DesignWidth="440" d:DesignHeight="640"
         x:Class="Unqueued.Views.MainWindow"
         x:DataType="vm:MainViewModel"
-        Icon="/Assets/unqueued.ico"
-        Title="Unqueued"
+        Icon="/Assets/unqueued.png"
+        Title="wasdlol skip"
         Width="440"
         Height="640"
         CanResize="False"
         SystemDecorations="None"
         WindowStartupLocation="CenterScreen"
         Topmost="True"
-        Background="{StaticResource WasdInkBrush}"
-        TransparencyLevelHint="None"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        TransparencyBackgroundFallback="#010A13"
         ShowInTaskbar="True">
 
     <Design.DataContext>
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <Panel>
-        <controls:CutCornerFrame Margin="10"
-                                 CutSize="20"
-                                 StrokeThickness="1.4"
-                                 Stroke="{StaticResource WasdMintBrush}"
-                                 Fill="{StaticResource WasdPanelBrush}">
-            <controls:CutCornerFrame Margin="9"
-                                     CutSize="13"
-                                     StrokeThickness="0.7"
-                                     Stroke="{StaticResource WasdMintBrush}"
-                                     ShowCornerMarks="False">
-                <Grid RowDefinitions="Auto,*" Margin="16,12,16,38">
-                    <Grid Grid.Row="0"
-                          Background="Transparent"
-                          PointerPressed="OnChromePointerPressed">
-                        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                            <controls:WasdMark Width="26" Height="26" />
-                            <StackPanel Spacing="0" VerticalAlignment="Center">
-                                <TextBlock Text="WASD"
-                                           FontFamily="{StaticResource Plex}"
-                                           FontSize="9"
-                                           LetterSpacing="3"
-                                           Foreground="{StaticResource WasdMintBrush}" />
-                                <TextBlock Text="UNQUEUED"
-                                           FontFamily="{StaticResource Plex}"
-                                           FontSize="11"
-                                           LetterSpacing="3.5"
-                                           Foreground="{StaticResource WasdTextBrush}" />
-                            </StackPanel>
-                        </StackPanel>
-                        <Button Classes="icon"
+    <controls:CutCornerFrame x:Name="Shell"
+                             CutSize="22"
+                             StrokeThickness="1.4"
+                             Stroke="#C8AA6E"
+                             Fill="#010A13"
+                             PointerPressed="OnChromePointerPressed">
+        <controls:CutCornerFrame Margin="9"
+                                 CutSize="13"
+                                 StrokeThickness="0.7"
+                                 Stroke="#C8AA6E"
+                                 Fill="#070B12"
+                                 ShowCornerMarks="False">
+            <Grid RowDefinitions="Auto,*" Margin="18,16,18,20">
+                <Grid Grid.Row="0" Background="Transparent" PointerPressed="OnChromePointerPressed">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="0,0,56,0">
+                        <controls:WasdMark Width="26"
+                                           Height="26"
+                                           VerticalAlignment="Center"
+                                           HexFill="#010A13"
+                                           Accent="#C8AA6E"
+                                           KeyFill="#16110A" />
+                        <TextBlock Text="wasdlol skip"
+                                   FontFamily="{StaticResource Plex}"
+                                   FontSize="14"
+                                   LetterSpacing="1.2"
+                                   Foreground="#C8AA6E"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
-                                Command="{Binding CloseToTrayCommand}"
-                                ToolTip.Tip="Keep League blocked and hide to the tray">
-                            <Path Stroke="{StaticResource WasdMintBrush}"
-                                  StrokeThickness="1.2"
-                                  Width="10"
-                                  Height="10"
-                                  Stretch="Uniform"
-                                  Data="M 0,0 L 10,10 M 10,0 L 0,10" />
+                                Spacing="2"
+                                Margin="0,0,6,0">
+                        <Button Classes="caption" Click="OnMinimizeClick">
+                            <Rectangle Width="11"
+                                       Height="1.4"
+                                       Fill="#C8AA6E"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
                         </Button>
+                        <Button Classes="caption close" Command="{Binding CloseToTrayCommand}">
+                            <Path Stroke="#C8AA6E"
+                                  StrokeThickness="1.4"
+                                  StrokeLineCap="Round"
+                                  Width="11"
+                                  Height="11"
+                                  Stretch="None"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Data="M 1,1 L 10,10 M 10,1 L 1,10" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="1"
+                      RowDefinitions="Auto,*,Auto,Auto"
+                      Margin="6,18,6,0">
+
+                    <TextBlock Grid.Row="0"
+                               Text="{Binding Eyebrow}"
+                               FontFamily="{StaticResource Plex}"
+                               FontSize="11"
+                               LetterSpacing="2.4"
+                               Foreground="#C8AA6E"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center" />
+
+                    <Grid Grid.Row="1" Margin="0,8">
+                        <controls:HexRing Stroke="#C8AA6E" Margin="36" />
+                        <Viewbox Stretch="Uniform" MaxHeight="200" Margin="64,36">
+                            <TextBlock Text="{Binding StreakDays}"
+                                       FontFamily="{StaticResource Cinzel}"
+                                       FontWeight="Bold"
+                                       FontSize="120"
+                                       Foreground="{StaticResource GoldGradient}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       TextAlignment="Center" />
+                        </Viewbox>
                     </Grid>
 
-                    <Panel Grid.Row="1">
-                        <Grid RowDefinitions="Auto,Auto,*,Auto,Auto,Auto"
-                              IsVisible="{Binding !IsConfirming}"
-                              Margin="6,14,6,0">
+                    <Button Grid.Row="2"
+                            Classes="primary"
+                            Margin="0,8,0,0"
+                            Content="Skip lol today"
+                            Command="{Binding SkipTodayCommand}" />
 
-                            <StackPanel Grid.Row="0"
-                                        Orientation="Horizontal"
-                                        HorizontalAlignment="Center"
-                                        Spacing="16"
-                                        Margin="0,4,0,18"
-                                        Opacity="0.9">
-                                <Path Width="14" Height="14" Stretch="Uniform" Stroke="{StaticResource WasdMintBrush}" StrokeThickness="1.2" Data="{StaticResource MarkTop}" />
-                                <Path Width="14" Height="14" Stretch="Uniform" Stroke="{StaticResource WasdMintBrush}" StrokeThickness="1.2" Fill="{StaticResource WasdMintBrush}" Data="{StaticResource MarkJungle}" />
-                                <Path Width="16" Height="16" Stretch="Uniform" Stroke="{StaticResource WasdTextBrush}" StrokeThickness="1.3" Data="{StaticResource MarkMid}" />
-                                <Path Width="14" Height="14" Stretch="Uniform" Stroke="{StaticResource WasdMintBrush}" StrokeThickness="1.2" Data="{StaticResource MarkBot}" />
-                                <Path Width="14" Height="14" Stretch="Uniform" Stroke="{StaticResource WasdMintBrush}" StrokeThickness="1.2" Data="{StaticResource MarkSupport}" />
-                            </StackPanel>
-
-                            <StackPanel Grid.Row="1" Spacing="8">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-                                    <Rectangle Width="8" Height="1" Fill="{StaticResource WasdMintBrush}" Opacity="0.7" VerticalAlignment="Center" />
-                                    <Path Width="8" Height="8" Stretch="Uniform" Fill="{StaticResource WasdMintBrush}" Data="{StaticResource MarkMid}" />
-                                    <TextBlock Text="{Binding Eyebrow}"
-                                               FontFamily="{StaticResource Plex}"
-                                               FontSize="11"
-                                               LetterSpacing="3.2"
-                                               Foreground="{StaticResource WasdMintBrush}"
-                                               VerticalAlignment="Center" />
-                                    <Path Width="8" Height="8" Stretch="Uniform" Fill="{StaticResource WasdMintBrush}" Data="{StaticResource MarkMid}" />
-                                    <Rectangle Width="8" Height="1" Fill="{StaticResource WasdMintBrush}" Opacity="0.7" VerticalAlignment="Center" />
-                                </StackPanel>
-                            </StackPanel>
-
-                            <Grid Grid.Row="2" Margin="0,4">
-                                <controls:HexRing Stroke="{StaticResource WasdMintBrush}" Margin="28" />
-                                <Viewbox Stretch="Uniform" MaxHeight="188" Margin="52,28">
-                                    <TextBlock Text="{Binding StreakDays}"
-                                               FontFamily="{StaticResource Cinzel}"
-                                               FontWeight="Bold"
-                                               FontSize="120"
-                                               Foreground="{StaticResource WasdGradient}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center" />
-                                </Viewbox>
-                            </Grid>
-
-                            <StackPanel Grid.Row="3" Spacing="8" Margin="0,4,0,22">
-                                <TextBlock Text="{Binding StatusLine}"
-                                           FontFamily="{StaticResource Plex}"
-                                           FontSize="14"
-                                           Foreground="{StaticResource WasdTextBrush}"
-                                           TextAlignment="Center"
-                                           TextWrapping="Wrap" />
-                                <TextBlock Text="{Binding DetailLine}"
-                                           FontFamily="{StaticResource Plex}"
-                                           FontSize="12"
-                                           Foreground="{StaticResource WasdTealBrush}"
-                                           Opacity="0.95"
-                                           TextAlignment="Center"
-                                           TextWrapping="Wrap" />
-                            </StackPanel>
-
-                            <Button Grid.Row="4" Classes="primary" Command="{Binding StayCommand}">
-                                <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                                    <Path Width="15" Height="15"
-                                          Stretch="Uniform"
-                                          Fill="{StaticResource WasdMintBrush}"
-                                          Stroke="{StaticResource WasdTextBrush}"
-                                          StrokeThickness="0.8"
-                                          Data="{StaticResource MarkShield}" />
-                                    <TextBlock Text="{Binding PrimaryLabel}"
-                                               FontFamily="{StaticResource Plex}"
-                                               FontSize="13"
-                                               Foreground="{StaticResource WasdTextBrush}"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
-                            </Button>
-
-                            <Button Grid.Row="5"
-                                    Classes="quiet"
-                                    Margin="0,12,0,4"
-                                    IsVisible="{Binding !IsAllowed}"
-                                    Command="{Binding BeginPassConfirmCommand}">
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Path Width="16" Height="16"
-                                          Stretch="Uniform"
-                                          Fill="{StaticResource WasdMintBrush}"
-                                          Data="{StaticResource MarkSwords}" />
-                                    <TextBlock Text="Pass"
-                                               FontFamily="{StaticResource Plex}"
-                                               FontSize="13"
-                                               LetterSpacing="1.5"
-                                               Foreground="{StaticResource WasdMintBrush}"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-
-                        <Grid RowDefinitions="*,Auto,Auto"
-                              IsVisible="{Binding IsConfirming}"
-                              Margin="10,20,10,4">
-                            <StackPanel Grid.Row="0"
-                                        VerticalAlignment="Center"
-                                        Spacing="16">
-                                <controls:WasdMark Width="56" Height="56" HorizontalAlignment="Center" />
-                                <TextBlock Text="PASS"
-                                           FontFamily="{StaticResource Plex}"
-                                           FontSize="11"
-                                           LetterSpacing="5"
-                                           Foreground="{StaticResource WasdMintBrush}"
-                                           HorizontalAlignment="Center" />
-                                <TextBlock Text="Resets your streak to 0. League is allowed until midnight."
-                                           FontFamily="{StaticResource Plex}"
-                                           FontSize="16"
-                                           Foreground="{StaticResource WasdTextBrush}"
-                                           TextAlignment="Center"
-                                           TextWrapping="Wrap"
-                                           LineHeight="24" />
-                            </StackPanel>
-
-                            <Button Grid.Row="1" Classes="primary" Command="{Binding ConfirmPassCommand}">
-                                <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                                    <Path Width="15" Height="15"
-                                          Stretch="Uniform"
-                                          Fill="{StaticResource WasdMintBrush}"
-                                          Stroke="{StaticResource WasdTextBrush}"
-                                          StrokeThickness="0.7"
-                                          Data="{StaticResource MarkPotion}" />
-                                    <TextBlock Text="Allow League today"
-                                               FontFamily="{StaticResource Plex}"
-                                               FontSize="13"
-                                               Foreground="{StaticResource WasdTextBrush}"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
-                            </Button>
-                            <Button Grid.Row="2"
-                                    Classes="quiet"
-                                    Content="Never mind"
-                                    Margin="0,12,0,6"
-                                    Command="{Binding CancelPassCommand}" />
-                        </Grid>
-                    </Panel>
+                    <Button Grid.Row="3"
+                            Classes="quiet"
+                            Margin="0,12,0,8"
+                            Content="Play"
+                            IsVisible="{Binding CanPlay}"
+                            Command="{Binding PlayCommand}" />
                 </Grid>
-            </controls:CutCornerFrame>
+            </Grid>
         </controls:CutCornerFrame>
-
-        <TextBlock Text="{Binding Footer}"
-                   FontFamily="{StaticResource Plex}"
-                   FontSize="10"
-                   Foreground="{StaticResource WasdTealBrush}"
-                   Opacity="0.8"
-                   TextAlignment="Center"
-                   TextWrapping="Wrap"
-                   VerticalAlignment="Bottom"
-                   Margin="30,0,30,16"
-                   IsHitTestVisible="False" />
-    </Panel>
+    </controls:CutCornerFrame>
 </Window>

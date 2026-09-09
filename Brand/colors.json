@@ -1,20 +1,21 @@
 {
   "name": "WASD",
-  "source": "https://www.color-hex.com/color-palette/8528",
+  "source": "Client dark / bone / gold",
   "colors": {
-    "mint": "#0AC8B9",
-    "teal": "#0397AB",
-    "deep": "#005A82",
-    "panel": "#0A323C",
-    "ink": "#091428"
+    "ink": "#010A13",
+    "bone": "#F0E6D2",
+    "gold": "#C8AA6E",
+    "panel": "#070B12",
+    "key": "#16110A",
+    "goldDeep": "#785A28"
   },
   "roles": {
     "background": "ink",
     "surface": "panel",
-    "border": "mint",
-    "accent": "teal",
-    "highlight": "mint",
-    "fill": "deep",
-    "text": "#E8FBFA"
+    "border": "gold",
+    "accent": "gold",
+    "highlight": "bone",
+    "fill": "ink",
+    "text": "bone"
   }
 }

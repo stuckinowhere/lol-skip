@@ -12,7 +12,14 @@ public class ProcessBlockerTests
             "LeagueClient",
             "LeagueClientUx",
             "LeagueClientUxRender",
-            "League of Legends"
+            "League of Legends",
+            "LoLPatcher",
+            "LeagueCrashHandler",
+            "LoLCrashHandler",
+            "RiotClientServices",
+            "RiotClientUx",
+            "RiotClientUxRender",
+            "RiotClientCrashHandler"
         ], ProcessBlocker.ProcessNames);
     }
 

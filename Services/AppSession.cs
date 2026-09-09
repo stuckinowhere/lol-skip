@@ -10,6 +10,8 @@ public sealed class AppSession : IDisposable
 {
     private readonly IClassicDesktopStyleApplicationLifetime _desktop;
     private DispatcherTimer? _clock;
+    private Thread? _showListener;
+    private volatile bool _listenForShow;
     private DateOnly _lastSeenDate;
     private bool _exiting;
 
@@ -52,6 +54,14 @@ public sealed class AppSession : IDisposable
         _clock = new DispatcherTimer { Interval = TimeSpan.FromSeconds(15) };
         _clock.Tick += (_, _) => OnClock();
         _clock.Start();
+
+        _listenForShow = true;
+        _showListener = new Thread(ListenForShowRequests)
+        {
+            IsBackground = true,
+            Name = "Unqueued.ShowListener"
+        };
+        _showListener.Start();
     }
 
     public void ShowRitual()
@@ -63,8 +73,17 @@ public sealed class AppSession : IDisposable
         Window.Show();
         Window.ShowInTaskbar = true;
         Window.WindowState = WindowState.Normal;
+        NativeWindowIcon.Apply(Window);
         Window.Activate();
         Window.Topmost = true;
+    }
+
+    public void ToggleRitual()
+    {
+        if (Window?.IsVisible == true)
+            HideToTray();
+        else
+            ShowRitual();
     }
 
     public void HideToTray()
@@ -76,10 +95,18 @@ public sealed class AppSession : IDisposable
         Window.ShowInTaskbar = false;
     }
 
-    public void BeginPassFromTray()
+    public void LockLeague() => Blocker.KillMatching();
+
+    public void AllowLeague() => RiotStartup.LaunchConfiguredClients();
+
+    public void SkipFromTray()
     {
-        ViewModel.BeginPassConfirm();
-        ShowRitual();
+        ViewModel.SkipTodayCommand.Execute(null);
+    }
+
+    public void PlayFromTray()
+    {
+        ViewModel.PlayCommand.Execute(null);
     }
 
     public void Quit()
@@ -90,8 +117,23 @@ public sealed class AppSession : IDisposable
 
     public void Dispose()
     {
+        _listenForShow = false;
+        SingleInstance.ShowEvent?.Set();
         _clock?.Stop();
         Blocker.Dispose();
+    }
+
+    private void ListenForShowRequests()
+    {
+        var showEvent = SingleInstance.ShowEvent;
+        if (showEvent is null)
+            return;
+
+        while (_listenForShow)
+        {
+            if (showEvent.WaitOne(TimeSpan.FromMilliseconds(500)))
+                Dispatcher.UIThread.Post(ShowRitual);
+        }
     }
 
     private void HideOnceOpened(object? sender, EventArgs e)

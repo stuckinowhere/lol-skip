@@ -37,8 +37,12 @@ public sealed class StreakStore
 
     public bool IsBlocked => !IsAllowed;
 
+    public bool HasSkippedToday => State.LastSkipDate == Today;
+
+    public bool CanPlay => !HasSkippedToday && !IsAllowed;
+
     public bool HasDecidedToday =>
-        State.LastCheckInDate == Today || State.LastPassDate == Today;
+        State.LastSkipDate == Today || State.LastPassDate == Today;
 
     public int StreakDays
     {
@@ -84,13 +88,23 @@ public sealed class StreakStore
 
     public void CheckIn()
     {
+        Skip();
+    }
+
+    public void Skip()
+    {
+        State.LastSkipDate = Today;
         State.LastCheckInDate = Today;
+        State.AllowedUntil = null;
         Save();
         Changed?.Invoke();
     }
 
     public void Pass()
     {
+        if (HasSkippedToday)
+            return;
+
         var local = _time.GetLocalNow();
         var midnight = new DateTimeOffset(local.Date.AddDays(1), local.Offset);
         State.LastPassDate = Today;

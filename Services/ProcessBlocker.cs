@@ -9,7 +9,14 @@ public sealed class ProcessBlocker : IDisposable
         "LeagueClient",
         "LeagueClientUx",
         "LeagueClientUxRender",
-        "League of Legends"
+        "League of Legends",
+        "LoLPatcher",
+        "LeagueCrashHandler",
+        "LoLCrashHandler",
+        "RiotClientServices",
+        "RiotClientUx",
+        "RiotClientUxRender",
+        "RiotClientCrashHandler"
     ];
 
     private readonly Func<bool> _shouldBlock;
@@ -25,6 +32,9 @@ public sealed class ProcessBlocker : IDisposable
         if (!OperatingSystem.IsWindows())
             return;
 
+        if (_shouldBlock())
+            KillMatching();
+
         _timer ??= new Timer(_ => Tick(), null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
     }
 
@@ -34,11 +44,9 @@ public sealed class ProcessBlocker : IDisposable
         _timer = null;
     }
 
-    public void Dispose() => Stop();
-
-    private void Tick()
+    public void KillMatching()
     {
-        if (!_shouldBlock())
+        if (!OperatingSystem.IsWindows())
             return;
 
         foreach (var name in ProcessNames)
@@ -69,5 +77,15 @@ public sealed class ProcessBlocker : IDisposable
                 }
             }
         }
+    }
+
+    public void Dispose() => Stop();
+
+    private void Tick()
+    {
+        if (!_shouldBlock())
+            return;
+
+        KillMatching();
     }
 }

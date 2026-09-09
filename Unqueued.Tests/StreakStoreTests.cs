@@ -25,8 +25,11 @@ public class StreakStoreTests
         store.CheckIn();
 
         Assert.True(store.HasDecidedToday);
+        Assert.True(store.HasSkippedToday);
+        Assert.False(store.CanPlay);
         Assert.True(store.IsBlocked);
         Assert.Equal(new DateOnly(2026, 9, 9), store.State.LastCheckInDate);
+        Assert.Equal(new DateOnly(2026, 9, 9), store.State.LastSkipDate);
         Assert.Null(store.State.LastPassDate);
         Assert.Null(store.State.AllowedUntil);
     }
@@ -42,6 +45,7 @@ public class StreakStoreTests
         Assert.True(store.IsAllowed);
         Assert.False(store.IsBlocked);
         Assert.True(store.HasDecidedToday);
+        Assert.False(store.CanPlay);
         Assert.Equal(new DateOnly(2026, 9, 9), store.State.LastPassDate);
         Assert.Equal(new DateTimeOffset(2026, 9, 10, 0, 0, 0, TimeSpan.Zero), store.State.AllowedUntil);
     }
@@ -60,6 +64,45 @@ public class StreakStoreTests
         Assert.False(store.IsAllowed);
         Assert.True(store.IsBlocked);
         Assert.False(store.HasDecidedToday);
+        Assert.True(store.CanPlay);
+    }
+
+    [Fact]
+    public void Skip_LocksPlayUntilNextDay()
+    {
+        var (store, clock) = NewStore(new DateTimeOffset(2026, 9, 9, 9, 0, 0, TimeSpan.Zero));
+        store.LoadOrCreate();
+        store.Skip();
+        store.Pass();
+
+        Assert.True(store.HasSkippedToday);
+        Assert.False(store.CanPlay);
+        Assert.True(store.IsBlocked);
+        Assert.Null(store.State.LastPassDate);
+
+        clock.LocalNow = new DateTimeOffset(2026, 9, 10, 8, 0, 0, TimeSpan.Zero);
+
+        Assert.False(store.HasSkippedToday);
+        Assert.True(store.CanPlay);
+        Assert.Equal(1, store.StreakDays);
+    }
+
+    [Fact]
+    public void ReloadsPersistedSkipFromDisk()
+    {
+        var path = Path.Combine(Path.GetTempPath(), "unqueued-tests", Guid.NewGuid().ToString("n"), "state.json");
+        var clock = new FakeTimeProvider(new DateTimeOffset(2026, 9, 9, 12, 0, 0, TimeSpan.Zero));
+        var first = new StreakStore(clock, path);
+        first.LoadOrCreate();
+        first.Skip();
+
+        var second = new StreakStore(clock, path);
+        second.LoadOrCreate();
+
+        Assert.True(second.HasSkippedToday);
+        Assert.False(second.CanPlay);
+        Assert.True(second.IsBlocked);
+        Assert.Equal(0, second.StreakDays);
     }
 
     [Fact]

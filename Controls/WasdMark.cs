@@ -11,13 +11,13 @@ namespace Unqueued.Controls;
 public sealed class WasdMark : Control
 {
     public static readonly StyledProperty<IBrush?> HexFillProperty =
-        AvaloniaProperty.Register<WasdMark, IBrush?>(nameof(HexFill), new SolidColorBrush(Color.Parse("#005A82")));
+        AvaloniaProperty.Register<WasdMark, IBrush?>(nameof(HexFill), new SolidColorBrush(Color.Parse("#010A13")));
 
     public static readonly StyledProperty<IBrush?> AccentProperty =
-        AvaloniaProperty.Register<WasdMark, IBrush?>(nameof(Accent), new SolidColorBrush(Color.Parse("#0AC8B9")));
+        AvaloniaProperty.Register<WasdMark, IBrush?>(nameof(Accent), new SolidColorBrush(Color.Parse("#C8AA6E")));
 
     public static readonly StyledProperty<IBrush?> KeyFillProperty =
-        AvaloniaProperty.Register<WasdMark, IBrush?>(nameof(KeyFill), new SolidColorBrush(Color.Parse("#0A323C")));
+        AvaloniaProperty.Register<WasdMark, IBrush?>(nameof(KeyFill), new SolidColorBrush(Color.Parse("#16110A")));
 
     static WasdMark()
     {
@@ -61,52 +61,38 @@ public sealed class WasdMark : Control
         var radius = size / 2 - Math.Max(1.2, size * 0.04);
         var hex = HexGeometry(cx, cy, radius);
         context.DrawGeometry(HexFill, new Pen(Accent, Math.Max(1.1, size * 0.055)), hex);
-
-        if (size < 26)
-        {
-            DrawCompactW(context, cx, cy, radius * 0.42);
-            return;
-        }
-
-        DrawKeys(context, cx, cy, radius);
+        DrawLetterL(context, cx, cy, radius);
     }
 
-    private void DrawKeys(DrawingContext context, double cx, double cy, double radius)
+    private void DrawLetterL(DrawingContext context, double cx, double cy, double radius)
     {
-        var key = radius * 0.22;
-        var gap = radius * 0.05;
-        var sY = cy + radius * 0.08;
-        var wY = sY - key - gap;
-        var aX = cx - key - gap;
-        var dX = cx + key + gap;
-
-        DrawKey(context, cx, wY, key);
-        DrawKey(context, aX, sY, key);
-        DrawKey(context, cx, sY, key);
-        DrawKey(context, dX, sY, key);
+        var geo = LetterLGeometry(cx, cy, radius);
+        var fill = Accent ?? new SolidColorBrush(Color.Parse("#C8AA6E"));
+        var stroke = new Pen(new SolidColorBrush(Color.Parse("#F0E6D2")), Math.Max(0.6, radius * 0.035));
+        context.DrawGeometry(fill, stroke, geo);
     }
 
-    private void DrawKey(DrawingContext context, double cx, double cy, double half)
+    private static StreamGeometry LetterLGeometry(double cx, double cy, double radius)
     {
-        var rect = new Rect(cx - half, cy - half, half * 2, half * 2);
-        context.DrawRectangle(KeyFill, new Pen(Accent, Math.Max(0.8, half * 0.18)), rect, 2, 2);
-    }
+        var left = cx - radius * 0.30;
+        var top = cy - radius * 0.40;
+        var bottom = cy + radius * 0.38;
+        var stem = radius * 0.24;
+        var foot = radius * 0.58;
+        var thick = radius * 0.22;
+        var cut = radius * 0.09;
 
-    private void DrawCompactW(DrawingContext context, double cx, double cy, double arm)
-    {
-        var pen = new Pen(Accent, Math.Max(1.4, arm * 0.28), lineCap: PenLineCap.Round, lineJoin: PenLineJoin.Round);
-        var geo = new StreamGeometry();
-        using (var ctx = geo.Open())
-        {
-            ctx.BeginFigure(new Point(cx - arm, cy - arm * 0.15), false);
-            ctx.LineTo(new Point(cx - arm * 0.35, cy + arm * 0.85));
-            ctx.LineTo(new Point(cx, cy + arm * 0.15));
-            ctx.LineTo(new Point(cx + arm * 0.35, cy + arm * 0.85));
-            ctx.LineTo(new Point(cx + arm, cy - arm * 0.15));
-            ctx.EndFigure(false);
-        }
-
-        context.DrawGeometry(null, pen, geo);
+        var geometry = new StreamGeometry();
+        using var ctx = geometry.Open();
+        ctx.BeginFigure(new Point(left, top), true);
+        ctx.LineTo(new Point(left + stem, top));
+        ctx.LineTo(new Point(left + stem, bottom - thick));
+        ctx.LineTo(new Point(left + foot - cut, bottom - thick));
+        ctx.LineTo(new Point(left + foot, bottom - thick + cut));
+        ctx.LineTo(new Point(left + foot, bottom));
+        ctx.LineTo(new Point(left, bottom));
+        ctx.EndFigure(true);
+        return geometry;
     }
 
     private static StreamGeometry HexGeometry(double cx, double cy, double radius)
