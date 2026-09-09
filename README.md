@@ -58,6 +58,12 @@ The day count lives in `%AppData%\Unqueued\state.json` and **survives restarts**
 
 Client dark `#010A13`, bone `#F0E6D2`, gold `#C8AA6E`. House brand is **WASD** (hex + WASD keys). Reuse it from [`Brand/`](Brand/README.md). Cinzel + IBM Plex Sans (SIL OFL). Lane marks are original geometry, not Riot art.
 
+## License
+
+[MIT](LICENSE). Cinzel and IBM Plex Sans are under the [SIL Open Font License](Assets/Fonts/LICENSE.txt).
+
+This is an unofficial tool. League of Legends, Riot Client, and Vanguard are trademarks of Riot Games, Inc. This project is not affiliated with, endorsed, or sponsored by Riot Games.
+
 ## Cutting a release
 
 After this branch is on `main`:
