@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Original hextech-style marks. Not Riot/League official art. -->
+    <StreamGeometry x:Key="MarkHex">M 16,1 L 29,8.5 L 29,23.5 L 16,31 L 3,23.5 L 3,8.5 Z</StreamGeometry>
+    <StreamGeometry x:Key="MarkSwords">M 7,25 L 19,7 L 22,10 L 10,28 Z M 4,22 L 12,30 L 8,32 L 2,24 Z M 13,25 L 25,7 L 28,10 L 16,28 Z M 10,22 L 18,30 L 14,32 L 8,24 Z</StreamGeometry>
+    <StreamGeometry x:Key="MarkPotion">M 12,2 L 20,2 L 20,8 L 24,13 L 24,26 C 24,30 20.5,32 16,32 C 11.5,32 8,30 8,26 L 8,13 L 12,8 Z M 11,17 L 21,17 L 21,26 C 21,28 18.8,29.5 16,29.5 C 13.2,29.5 11,28 11,26 Z</StreamGeometry>
+    <StreamGeometry x:Key="MarkShield">M 16,2 L 30,9 L 30,19 C 30,27 16,33 16,33 C 16,33 2,27 2,19 L 2,9 Z M 16,7 L 25,12 L 25,19 C 25,24 16,29 16,29 C 16,29 7,24 7,19 L 7,12 Z</StreamGeometry>
+    <StreamGeometry x:Key="MarkNexus">M 16,3 L 27,16 L 16,29 L 5,16 Z M 16,10 L 21,16 L 16,22 L 11,16 Z</StreamGeometry>
+    <StreamGeometry x:Key="MarkTurret">M 16,2 L 20,8 L 20,12 L 24,16 L 24,28 L 8,28 L 8,16 L 12,12 L 12,8 Z M 12,28 L 12,32 L 20,32 L 20,28 M 14,18 L 18,18 L 18,24 L 14,24 Z</StreamGeometry>
+    <StreamGeometry x:Key="MarkTop">M 16,4 L 28,16 L 22,16 L 22,28 L 10,28 L 10,16 L 4,16 Z</StreamGeometry>
+    <StreamGeometry x:Key="MarkJungle">M 16,3 L 22,12 L 28,12 L 20,18 L 24,29 L 16,22 L 8,29 L 12,18 L 4,12 L 10,12 Z</StreamGeometry>
+    <StreamGeometry x:Key="MarkMid">M 16,2 L 30,16 L 16,30 L 2,16 Z</StreamGeometry>
+    <StreamGeometry x:Key="MarkBot">M 16,28 L 28,16 L 22,16 L 22,4 L 10,4 L 10,16 L 4,16 Z</StreamGeometry>
+    <StreamGeometry x:Key="MarkSupport">M 16,4 L 20,12 L 28,12 L 21.5,17.5 L 24,26 L 16,21 L 8,26 L 10.5,17.5 L 4,12 L 12,12 Z</StreamGeometry>
+</ResourceDictionary>

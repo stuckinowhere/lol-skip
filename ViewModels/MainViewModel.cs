@@ -23,48 +23,27 @@ public partial class MainViewModel : ViewModelBase
     }
 
     [ObservableProperty] private int _streakDays;
-    [ObservableProperty] private string _eyebrow = "DAYS WITHOUT LEAGUE";
-    [ObservableProperty] private string _statusLine = "Day 0 — the queue is closed.";
-    [ObservableProperty] private string _detailLine = string.Empty;
-    [ObservableProperty] private string _primaryLabel = "Another day without LoL";
-    [ObservableProperty] private bool _isAllowed;
-    [ObservableProperty] private bool _isConfirming;
-    [ObservableProperty] private string _footer = "Closing keeps League blocked. Quit from the tray to stop protection.";
+    [ObservableProperty] private string _eyebrow = "DAYS WITHOUT LOL";
+    [ObservableProperty] private bool _canPlay;
 
     [RelayCommand]
-    private void Stay()
+    private void SkipToday()
     {
-        if (IsConfirming)
-            return;
-
-        if (!_store.IsAllowed)
-            _store.CheckIn();
-
+        _store.Skip();
+        _session?.LockLeague();
         Refresh();
         _session?.HideToTray();
     }
 
     [RelayCommand]
-    public void BeginPassConfirm()
+    private void Play()
     {
-        if (_store.IsAllowed)
+        if (!_store.CanPlay)
             return;
 
-        IsConfirming = true;
-    }
-
-    [RelayCommand]
-    private void CancelPass()
-    {
-        IsConfirming = false;
-    }
-
-    [RelayCommand]
-    private void ConfirmPass()
-    {
         _store.Pass();
-        IsConfirming = false;
         Refresh();
+        _session?.AllowLeague();
         _session?.HideToTray();
     }
 
@@ -74,31 +53,7 @@ public partial class MainViewModel : ViewModelBase
     public void Refresh()
     {
         StreakDays = _store.StreakDays;
-        IsAllowed = _store.IsAllowed;
-
-        if (IsAllowed)
-        {
-            Eyebrow = "STREAK RESET";
-            StatusLine = "Streak reset. League is allowed until midnight.";
-            DetailLine = $"Allowed until {_store.State.AllowedUntil:t}";
-            PrimaryLabel = "Back to tray";
-            Footer = "League can run until local midnight. The ritual returns tomorrow.";
-        }
-        else if (StreakDays == 0)
-        {
-            Eyebrow = "DAYS WITHOUT LEAGUE";
-            StatusLine = "Day 0 — the queue is closed.";
-            DetailLine = "The client stays closed until you Pass.";
-            PrimaryLabel = "Another day without LoL";
-            Footer = "Closing keeps League blocked. Quit from the tray to stop protection.";
-        }
-        else
-        {
-            Eyebrow = "DAYS WITHOUT LEAGUE";
-            StatusLine = "The queue is closed.";
-            DetailLine = $"Since {_store.StreakOrigin:MMMM d, yyyy}";
-            PrimaryLabel = "Another day without LoL";
-            Footer = "Closing keeps League blocked. Quit from the tray to stop protection.";
-        }
+        CanPlay = _store.CanPlay;
+        Eyebrow = _store.IsAllowed ? "PLAYING TODAY" : "DAYS WITHOUT LOL";
     }
 }

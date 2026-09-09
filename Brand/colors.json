@@ -1,0 +1,21 @@
+{
+  "name": "WASD",
+  "source": "Client dark / bone / gold",
+  "colors": {
+    "ink": "#010A13",
+    "bone": "#F0E6D2",
+    "gold": "#C8AA6E",
+    "panel": "#070B12",
+    "key": "#16110A",
+    "goldDeep": "#785A28"
+  },
+  "roles": {
+    "background": "ink",
+    "surface": "panel",
+    "border": "gold",
+    "accent": "gold",
+    "highlight": "bone",
+    "fill": "ink",
+    "text": "bone"
+  }
+}

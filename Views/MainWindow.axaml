@@ -5,157 +5,126 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        d:DesignWidth="420" d:DesignHeight="560"
+        d:DesignWidth="440" d:DesignHeight="640"
         x:Class="Unqueued.Views.MainWindow"
         x:DataType="vm:MainViewModel"
-        Icon="/Assets/unqueued.ico"
-        Title="Unqueued"
-        Width="420"
-        Height="560"
+        Icon="/Assets/unqueued.png"
+        Title="wasdlol skip"
+        Width="440"
+        Height="640"
         CanResize="False"
         SystemDecorations="None"
         WindowStartupLocation="CenterScreen"
         Topmost="True"
-        Background="#010A13"
-        TransparencyLevelHint="None"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        TransparencyBackgroundFallback="#010A13"
         ShowInTaskbar="True">
 
     <Design.DataContext>
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <Panel>
-        <controls:CutCornerFrame Margin="10" CutSize="18" StrokeThickness="1.2" Stroke="#C8AA6E">
-            <controls:CutCornerFrame Margin="8" CutSize="12" StrokeThickness="0.6" Stroke="#C8AA6E">
-                <Grid RowDefinitions="Auto,*" Margin="18,14,18,36">
-                    <Grid Grid.Row="0"
-                          Background="Transparent"
-                          PointerPressed="OnChromePointerPressed">
-                        <TextBlock Text="UNQUEUED"
+    <controls:CutCornerFrame x:Name="Shell"
+                             CutSize="22"
+                             StrokeThickness="1.4"
+                             Stroke="#C8AA6E"
+                             Fill="#010A13"
+                             PointerPressed="OnChromePointerPressed">
+        <controls:CutCornerFrame Margin="9"
+                                 CutSize="13"
+                                 StrokeThickness="0.7"
+                                 Stroke="#C8AA6E"
+                                 Fill="#070B12"
+                                 ShowCornerMarks="False">
+            <Grid RowDefinitions="Auto,*" Margin="18,16,18,20">
+                <Grid Grid.Row="0" Background="Transparent" PointerPressed="OnChromePointerPressed">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="0,0,56,0">
+                        <controls:WasdMark Width="26"
+                                           Height="26"
+                                           VerticalAlignment="Center"
+                                           HexFill="#010A13"
+                                           Accent="#C8AA6E"
+                                           KeyFill="#16110A" />
+                        <TextBlock Text="wasdlol skip"
                                    FontFamily="{StaticResource Plex}"
-                                   FontSize="11"
-                                   LetterSpacing="4"
+                                   FontSize="14"
+                                   LetterSpacing="1.2"
                                    Foreground="#C8AA6E"
-                                   Opacity="0.85"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Left"
-                                   Margin="4,2,40,2" />
-                        <Button Classes="icon"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
-                                Command="{Binding CloseToTrayCommand}"
-                                ToolTip.Tip="Keep League blocked and hide to the tray">
-                            <Path Stroke="#C8AA6E"
-                                  StrokeThickness="1.2"
-                                  Width="10"
-                                  Height="10"
-                                  Stretch="Uniform"
-                                  Data="M 0,0 L 10,10 M 10,0 L 0,10" />
+                                Spacing="2"
+                                Margin="0,0,6,0">
+                        <Button Classes="caption" Click="OnMinimizeClick">
+                            <Rectangle Width="11"
+                                       Height="1.4"
+                                       Fill="#C8AA6E"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
                         </Button>
+                        <Button Classes="caption close" Command="{Binding CloseToTrayCommand}">
+                            <Path Stroke="#C8AA6E"
+                                  StrokeThickness="1.4"
+                                  StrokeLineCap="Round"
+                                  Width="11"
+                                  Height="11"
+                                  Stretch="None"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Data="M 1,1 L 10,10 M 10,1 L 1,10" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="1"
+                      RowDefinitions="Auto,*,Auto,Auto"
+                      Margin="6,18,6,0">
+
+                    <TextBlock Grid.Row="0"
+                               Text="{Binding Eyebrow}"
+                               FontFamily="{StaticResource Plex}"
+                               FontSize="11"
+                               LetterSpacing="2.4"
+                               Foreground="#C8AA6E"
+                               HorizontalAlignment="Center"
+                               TextAlignment="Center" />
+
+                    <Grid Grid.Row="1" Margin="0,8">
+                        <controls:HexRing Stroke="#C8AA6E" Margin="36" />
+                        <Viewbox Stretch="Uniform" MaxHeight="200" Margin="64,36">
+                            <TextBlock Text="{Binding StreakDays}"
+                                       FontFamily="{StaticResource Cinzel}"
+                                       FontWeight="Bold"
+                                       FontSize="120"
+                                       Foreground="{StaticResource GoldGradient}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       TextAlignment="Center" />
+                        </Viewbox>
                     </Grid>
 
-                    <Panel Grid.Row="1">
-                        <Grid RowDefinitions="Auto,*,Auto,Auto,Auto"
-                              IsVisible="{Binding !IsConfirming}"
-                              Margin="8,20,8,4">
-                            <StackPanel Grid.Row="0" Spacing="6">
-                                <TextBlock Text="{Binding Eyebrow}"
-                                           FontFamily="{StaticResource Plex}"
-                                           FontSize="11"
-                                           LetterSpacing="3.2"
-                                           Foreground="#C8AA6E"
-                                           Opacity="0.9"
-                                           HorizontalAlignment="Center" />
-                                <Rectangle Width="36" Height="1" Fill="#C8AA6E" Opacity="0.7" HorizontalAlignment="Center" />
-                            </StackPanel>
+                    <Button Grid.Row="2"
+                            Classes="primary"
+                            Margin="0,8,0,0"
+                            Content="Skip lol today"
+                            Command="{Binding SkipTodayCommand}" />
 
-                            <Viewbox Grid.Row="1"
-                                     Stretch="Uniform"
-                                     MaxHeight="210"
-                                     Margin="0,8">
-                                <TextBlock Text="{Binding StreakDays}"
-                                           FontFamily="{StaticResource Cinzel}"
-                                           FontWeight="Bold"
-                                           FontSize="132"
-                                           Foreground="#C8AA6E"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
-                            </Viewbox>
-
-                            <StackPanel Grid.Row="2" Spacing="8" Margin="0,0,0,28">
-                                <TextBlock Text="{Binding StatusLine}"
-                                           FontFamily="{StaticResource Plex}"
-                                           FontSize="14"
-                                           Foreground="#F0E6D2"
-                                           TextAlignment="Center"
-                                           TextWrapping="Wrap" />
-                                <TextBlock Text="{Binding DetailLine}"
-                                           FontFamily="{StaticResource Plex}"
-                                           FontSize="12"
-                                           Foreground="#C8AA6E"
-                                           Opacity="0.8"
-                                           TextAlignment="Center"
-                                           TextWrapping="Wrap" />
-                            </StackPanel>
-
-                            <Button Grid.Row="3"
-                                    Classes="primary"
-                                    Content="{Binding PrimaryLabel}"
-                                    Command="{Binding StayCommand}" />
-
-                            <Button Grid.Row="4"
-                                    Classes="quiet"
-                                    Content="Pass"
-                                    Margin="0,10,0,6"
-                                    IsVisible="{Binding !IsAllowed}"
-                                    Command="{Binding BeginPassConfirmCommand}" />
-                        </Grid>
-
-                        <Grid RowDefinitions="*,Auto,Auto,Auto"
-                              IsVisible="{Binding IsConfirming}"
-                              Margin="12,28,12,8">
-                            <StackPanel Grid.Row="0"
-                                        VerticalAlignment="Center"
-                                        Spacing="14">
-                                <TextBlock Text="PASS"
-                                           FontFamily="{StaticResource Plex}"
-                                           FontSize="11"
-                                           LetterSpacing="4"
-                                           Foreground="#C8AA6E"
-                                           HorizontalAlignment="Center" />
-                                <TextBlock Text="Resets your streak to 0. League is allowed until midnight."
-                                           FontFamily="{StaticResource Plex}"
-                                           FontSize="16"
-                                           Foreground="#F0E6D2"
-                                           TextAlignment="Center"
-                                           TextWrapping="Wrap"
-                                           LineHeight="24" />
-                            </StackPanel>
-
-                            <Button Grid.Row="1"
-                                    Classes="primary"
-                                    Content="Allow League today"
-                                    Command="{Binding ConfirmPassCommand}" />
-                            <Button Grid.Row="2"
-                                    Classes="quiet"
-                                    Content="Never mind"
-                                    Margin="0,10,0,8"
-                                    Command="{Binding CancelPassCommand}" />
-                        </Grid>
-                    </Panel>
+                    <Button Grid.Row="3"
+                            Classes="quiet"
+                            Margin="0,12,0,8"
+                            Content="Play"
+                            IsVisible="{Binding CanPlay}"
+                            Command="{Binding PlayCommand}" />
                 </Grid>
-            </controls:CutCornerFrame>
+            </Grid>
         </controls:CutCornerFrame>
-
-        <TextBlock Text="{Binding Footer}"
-                   FontFamily="{StaticResource Plex}"
-                   FontSize="10"
-                   Foreground="#C8AA6E"
-                   Opacity="0.55"
-                   TextAlignment="Center"
-                   TextWrapping="Wrap"
-                   VerticalAlignment="Bottom"
-                   Margin="28,0,28,16"
-                   IsHitTestVisible="False" />
-    </Panel>
+    </controls:CutCornerFrame>
 </Window>

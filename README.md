@@ -1,8 +1,6 @@
-# Unqueued
+# wasdlol skip
 
-A Windows 11 app you run **on your PC**. It counts days without League of Legends, starts at login, and closes the League client unless you Pass.
-
-This repo is the source. The cloud session only compiled it. Blocking, startup, and the ritual window all run locally on Windows 11.
+A Windows 11 app you run **on your PC**. It counts days without League of Legends, starts at login (ahead of typical Riot Client startup), and keeps League closed unless you Play.
 
 ## Run it on your Windows 11 PC
 
@@ -10,7 +8,7 @@ This repo is the source. The cloud session only compiled it. Blocking, startup, 
 2. Get this repo onto the machine (clone, or download the ZIP and unzip it).
 3. In that folder, either:
 
-**Easiest — a real `Unqueued.exe` that starts with Windows**
+**Easiest — a real `WasdLolSkip.exe` that starts with Windows**
 
 Right-click `publish-windows.ps1` → **Run with PowerShell**.  
 Or from PowerShell:
@@ -20,7 +18,7 @@ Set-ExecutionPolicy -Scope Process Bypass
 .\publish-windows.ps1
 ```
 
-That builds `publish\win-x64\Unqueued.exe`, launches it, and opens the folder. Pin or leave that exe where you want it. The first time `Unqueued.exe` starts, it registers itself at login.
+That builds `publish\win-x64\WasdLolSkip.exe` and launches it. The first time it starts, it copies itself to `%LocalAppData%\WasdLolSkip` and writes one HKCU Run entry (`--startup`) so it can run before Riot Client. It does not add a scheduled task or Startup-folder shortcut.
 
 **Dev loop**
 
@@ -34,22 +32,22 @@ If PowerShell blocks scripts: `Set-ExecutionPolicy -Scope Process Bypass`.
 
 ## What it does
 
-At login you get a small gold-on-black window with the day count.
+At login you get a gold-on-black window with the day count.
 
-- **Another day without LoL** — keep League blocked, hide to the tray.
-- **Pass** — reset the streak to 0 and allow League until local midnight.
-- Closing the window still blocks. **Quit** from the tray stops protection.
+- **Skip lol today** — close League / Riot Client processes, lock them until tomorrow, hide to the tray. Play is disabled for the rest of the day.
+- **Play** — no extra confirm. Allows League, and starts Riot Client / Vanguard if they are set to launch at Windows logon.
+- There is no close button. **Quit** from the tray stops protection.
 
-While blocked it kills `LeagueClient.exe`, `LeagueClientUx.exe`, `LeagueClientUxRender.exe`, and `League of Legends.exe`. Riot Client is left running so Valorant/TFT still work.
+While locked it kills League and Riot Client processes if they are already running.
 
-State lives in `%AppData%\Unqueued\state.json`.
+The day count lives in `%AppData%\Unqueued\state.json` and **survives restarts**.
 
 ## Tray
 
-- **Open** — show the ritual window
-- **Pass** — same confirm flow as the window
+- **Open** — show the window
+- **Skip lol today** / **Play** — same as the window
 - **Quit — stops protection** — exits; League can run again
 
 ## Design
 
-Client dark `#010A13`, bone `#F0E6D2`, gold `#C8AA6E`. Cinzel + IBM Plex Sans (SIL OFL). No Riot marks or client fonts.
+Client dark `#010A13`, bone `#F0E6D2`, gold `#C8AA6E`. House brand is **WASD** (hex + WASD keys). Reuse it from [`Brand/`](Brand/README.md). Cinzel + IBM Plex Sans (SIL OFL). Lane marks are original geometry, not Riot art.

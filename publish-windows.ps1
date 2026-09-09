@@ -1,5 +1,5 @@
-# Build Unqueued.exe for this Windows PC, then open the output folder.
-# Double-click Unqueued.exe there. First launch registers it at Windows login.
+# Build WasdLolSkip.exe for this Windows PC, then launch it.
+# First launch registers it at Windows login.
 
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
@@ -18,9 +18,9 @@ dotnet publish .\Unqueued.csproj -c Release -r win-x64 --self-contained true `
     /p:DebugType=none `
     -o $out
 
-$exe = Join-Path $out "Unqueued.exe"
+$exe = Join-Path $out "WasdLolSkip.exe"
+Copy-Item (Join-Path $PSScriptRoot "Assets\unqueued.ico") (Join-Path $out "WasdLolSkip.ico") -Force
 Write-Host ""
 Write-Host "Built: $exe"
-Write-Host "Starting Unqueued..."
+Write-Host "Starting wasdlol skip..."
 Start-Process $exe
-Start-Process explorer.exe $out

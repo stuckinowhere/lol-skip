@@ -1,17 +1,50 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="using:Unqueued.Controls"
              x:Class="Unqueued.App"
              RequestedThemeVariant="Dark">
 
     <Application.Resources>
-        <FontFamily x:Key="Cinzel">avares://Unqueued/Assets/Fonts/Cinzel-Regular.ttf#Cinzel, avares://Unqueued/Assets/Fonts/Cinzel-Bold.ttf#Cinzel</FontFamily>
-        <FontFamily x:Key="Plex">avares://Unqueued/Assets/Fonts/IBMPlexSans-Regular.ttf#IBM Plex Sans, avares://Unqueued/Assets/Fonts/IBMPlexSans-Medium.ttf#IBM Plex Sans</FontFamily>
-        <Color x:Key="Ink">#010A13</Color>
-        <Color x:Key="Bone">#F0E6D2</Color>
-        <Color x:Key="Gold">#C8AA6E</Color>
-        <SolidColorBrush x:Key="InkBrush" Color="{StaticResource Ink}" />
-        <SolidColorBrush x:Key="BoneBrush" Color="{StaticResource Bone}" />
-        <SolidColorBrush x:Key="GoldBrush" Color="{StaticResource Gold}" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://WasdLolSkip/Assets/Marks.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="Cinzel">avares://WasdLolSkip/Assets/Fonts/Cinzel-Regular.ttf#Cinzel, avares://WasdLolSkip/Assets/Fonts/Cinzel-Bold.ttf#Cinzel</FontFamily>
+            <FontFamily x:Key="Plex">avares://WasdLolSkip/Assets/Fonts/IBMPlexSans-Regular.ttf#IBM Plex Sans, avares://WasdLolSkip/Assets/Fonts/IBMPlexSans-Medium.ttf#IBM Plex Sans</FontFamily>
+            <Color x:Key="Ink">#010A13</Color>
+            <Color x:Key="Bone">#F0E6D2</Color>
+            <Color x:Key="Gold">#C8AA6E</Color>
+            <SolidColorBrush x:Key="InkBrush" Color="{StaticResource Ink}" />
+            <SolidColorBrush x:Key="BoneBrush" Color="{StaticResource Bone}" />
+            <SolidColorBrush x:Key="GoldBrush" Color="{StaticResource Gold}" />
+            <CornerRadius x:Key="OverlayCornerRadius">0</CornerRadius>
+            <Thickness x:Key="MenuFlyoutPresenterBorderThemeThickness">0</Thickness>
+            <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#010A13" />
+            <SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush" Color="#C8AA6E" />
+            <SolidColorBrush x:Key="MenuFlyoutItemBackground" Color="Transparent" />
+            <SolidColorBrush x:Key="MenuFlyoutItemForeground" Color="#C8AA6E" />
+            <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="#16110A" />
+            <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver" Color="#F0E6D2" />
+            <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPressed" Color="#C8AA6E" />
+            <SolidColorBrush x:Key="MenuFlyoutItemForegroundPressed" Color="#010A13" />
+            <SolidColorBrush x:Key="MenuFlyoutItemBackgroundDisabled" Color="Transparent" />
+            <SolidColorBrush x:Key="MenuFlyoutItemForegroundDisabled" Color="#785A28" />
+            <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForeground" Color="#C8AA6E" />
+            <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForegroundPointerOver" Color="#F0E6D2" />
+            <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForegroundPressed" Color="#010A13" />
+            <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForegroundDisabled" Color="#785A28" />
+            <SolidColorBrush x:Key="MenuFlyoutSeparatorBackground" Color="#C8AA6E" />
+            <SolidColorBrush x:Key="MenuFlyoutSubItemChevron" Color="#C8AA6E" />
+            <SolidColorBrush x:Key="MenuFlyoutSubItemChevronPointerOver" Color="#F0E6D2" />
+            <SolidColorBrush x:Key="MenuFlyoutSubItemChevronPressed" Color="#010A13" />
+            <SolidColorBrush x:Key="MenuFlyoutSubItemChevronDisabled" Color="#785A28" />
+            <SolidColorBrush x:Key="MenuFlyoutSubItemChevronSubMenuOpened" Color="#F0E6D2" />
+            <LinearGradientBrush x:Key="GoldGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#F0E6D2" Offset="0" />
+                <GradientStop Color="#C8AA6E" Offset="0.55" />
+                <GradientStop Color="#785A28" Offset="1" />
+            </LinearGradientBrush>
+        </ResourceDictionary>
     </Application.Resources>
 
     <Application.Styles>
@@ -20,73 +53,155 @@
         <Style Selector="Window">
             <Setter Property="FontFamily" Value="{StaticResource Plex}" />
             <Setter Property="Foreground" Value="{StaticResource BoneBrush}" />
-            <Setter Property="Background" Value="{StaticResource InkBrush}" />
+            <Setter Property="Background" Value="Transparent" />
         </Style>
 
         <Style Selector="Button.primary">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{StaticResource BoneBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource GoldBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Background" Value="#C8AA6E" />
+            <Setter Property="Foreground" Value="#010A13" />
+            <Setter Property="BorderBrush" Value="#C8AA6E" />
+            <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="16,13" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="FontFamily" Value="{StaticResource Plex}" />
             <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="Medium" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="CornerRadius" Value="0" />
         </Style>
-        <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#16110A" />
-            <Setter Property="BorderBrush" Value="#F0E6D2" />
-            <Setter Property="Foreground" Value="#F0E6D2" />
-        </Style>
-        <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Style Selector="Button.primary /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Background" Value="#C8AA6E" />
             <Setter Property="Foreground" Value="#010A13" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#F0E6D2" />
+            <Setter Property="Foreground" Value="#010A13" />
+        </Style>
+        <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#785A28" />
+            <Setter Property="Foreground" Value="#F0E6D2" />
         </Style>
 
         <Style Selector="Button.quiet">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{StaticResource GoldBrush}" />
+            <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Padding" Value="8,6" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="8,10" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="FontFamily" Value="{StaticResource Plex}" />
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="Opacity" Value="0.75" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Opacity" Value="0.85" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="CornerRadius" Value="0" />
+        </Style>
+        <Style Selector="Button.quiet /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
         </Style>
         <Style Selector="Button.quiet:pointerover /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="#F0E6D2" />
-            <Setter Property="Opacity" Value="1" />
+            <Setter Property="BorderThickness" Value="0" />
         </Style>
 
-        <Style Selector="Button.icon">
+        <Style Selector="Button.caption">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Padding" Value="8" />
-            <Setter Property="Width" Value="32" />
-            <Setter Property="Height" Value="32" />
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Padding" Value="0" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
-        <Style Selector="Button.icon:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Style Selector="Button.caption /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="Button.caption:pointerover /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Background" Value="#16110A" />
+        </Style>
+        <Style Selector="Button.caption.close:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#3A2218" />
+        </Style>
+
+        <Style Selector="MenuFlyoutPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MinWidth" Value="228" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="FontFamily" Value="{StaticResource Plex}" />
+            <Setter Property="Foreground" Value="{StaticResource GoldBrush}" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <controls:CutCornerFrame CutSize="10"
+                                             StrokeThickness="1.2"
+                                             Stroke="#C8AA6E"
+                                             Fill="#010A13"
+                                             ShowCornerMarks="False">
+                        <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                      VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+                            <ItemsPresenter Name="PART_ItemsPresenter"
+                                            Margin="8,10"
+                                            ItemsPanel="{TemplateBinding ItemsPanel}"
+                                            KeyboardNavigation.TabNavigation="Continue"
+                                            Grid.IsSharedSizeScope="True" />
+                        </ScrollViewer>
+                    </controls:CutCornerFrame>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="MenuItem">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{StaticResource GoldBrush}" />
+            <Setter Property="FontFamily" Value="{StaticResource Plex}" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Padding" Value="14,9" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="MenuItem:selected /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="#16110A" />
+        </Style>
+        <Style Selector="MenuItem:selected /template/ ContentPresenter#PART_HeaderPresenter">
+            <Setter Property="Foreground" Value="#F0E6D2" />
+        </Style>
+        <Style Selector="MenuFlyoutPresenter MenuItem:nth-child(2):selected /template/ Border#PART_LayoutRoot">
+            <Setter Property="Background" Value="#C8AA6E" />
+        </Style>
+        <Style Selector="MenuFlyoutPresenter MenuItem:nth-child(2):selected /template/ ContentPresenter#PART_HeaderPresenter">
+            <Setter Property="Foreground" Value="#010A13" />
+        </Style>
+
+        <Style Selector="Separator">
+            <Setter Property="Background" Value="#C8AA6E" />
+            <Setter Property="Height" Value="1" />
+            <Setter Property="Margin" Value="12,7" />
+            <Setter Property="Opacity" Value="0.35" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
         </Style>
     </Application.Styles>
 
     <TrayIcon.Icons>
         <TrayIcons>
-            <TrayIcon Icon="/Assets/unqueued.ico"
-                      ToolTipText="Unqueued — days without League"
+            <TrayIcon Icon="/Assets/unqueued.png"
+                      ToolTipText="wasdlol skip"
                       Clicked="OnTrayClicked">
                 <TrayIcon.Menu>
                     <NativeMenu>
                         <NativeMenuItem Header="Open" Click="OnOpenRitual" />
-                        <NativeMenuItem Header="Pass" Click="OnPassFromTray" />
+                        <NativeMenuItem Header="Skip lol today" Click="OnSkipFromTray" />
+                        <NativeMenuItem Header="Play" Click="OnPlayFromTray" />
                         <NativeMenuItemSeparator />
                         <NativeMenuItem Header="Quit — stops protection" Click="OnQuit" />
                     </NativeMenu>
