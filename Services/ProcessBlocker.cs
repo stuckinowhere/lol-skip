@@ -16,7 +16,8 @@ public sealed class ProcessBlocker : IDisposable
         "RiotClientServices",
         "RiotClientUx",
         "RiotClientUxRender",
-        "RiotClientCrashHandler"
+        "RiotClientCrashHandler",
+        "vgtray"
     ];
 
     private readonly Func<bool> _shouldBlock;

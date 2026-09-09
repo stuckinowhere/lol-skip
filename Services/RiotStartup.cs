@@ -50,10 +50,19 @@ public static class RiotStartup
         }
     }
 
-    private static bool LooksLikeRiot(string name, string command) =>
-        Needles.Any(needle =>
-            name.Contains(needle, StringComparison.OrdinalIgnoreCase)
-            || command.Contains(needle, StringComparison.OrdinalIgnoreCase));
+    internal static bool LooksLikeRiot(string name, string command)
+    {
+        if (ContainsNeedle(name))
+            return true;
+
+        if (!TrySplitCommand(command, out var file, out _))
+            return ContainsNeedle(command);
+
+        return ContainsNeedle(file);
+    }
+
+    private static bool ContainsNeedle(string text) =>
+        Needles.Any(needle => text.Contains(needle, StringComparison.OrdinalIgnoreCase));
 
     private static void TryStart(string command)
     {
@@ -89,7 +98,7 @@ public static class RiotStartup
         }
     }
 
-    private static bool TrySplitCommand(string command, out string file, out string arguments)
+    internal static bool TrySplitCommand(string command, out string file, out string arguments)
     {
         file = string.Empty;
         arguments = string.Empty;
@@ -100,12 +109,21 @@ public static class RiotStartup
         if (command.StartsWith('"'))
         {
             var end = command.IndexOf('"', 1);
-            if (end < 0)
+            if (end <= 1)
                 return false;
 
             file = command[1..end];
             arguments = command[(end + 1)..].Trim();
-            return true;
+            return file.Length > 0;
+        }
+
+        var exe = command.IndexOf(".exe", StringComparison.OrdinalIgnoreCase);
+        if (exe >= 0)
+        {
+            var fileEnd = exe + 4;
+            file = command[..fileEnd];
+            arguments = fileEnd < command.Length ? command[fileEnd..].Trim() : string.Empty;
+            return file.Length > 0;
         }
 
         var space = command.IndexOf(' ');

@@ -103,6 +103,7 @@ public class StreakStoreTests
         Assert.False(second.CanPlay);
         Assert.True(second.IsBlocked);
         Assert.Equal(0, second.StreakDays);
+        Assert.False(File.Exists(path + ".tmp"));
     }
 
     [Fact]
@@ -132,6 +133,7 @@ public class StreakStoreTests
         Assert.True(second.IsAllowed);
         Assert.Equal(0, second.StreakDays);
         Assert.Equal(new DateOnly(2026, 9, 9), second.State.LastPassDate);
+        Assert.False(File.Exists(path + ".tmp"));
     }
 
     private static (StreakStore Store, FakeTimeProvider Clock) NewStore(DateTimeOffset now)

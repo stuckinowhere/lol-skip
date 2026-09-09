@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Reflection;
 using Microsoft.Win32;
 
 namespace Unqueued.Services;
@@ -11,9 +10,10 @@ public static class StartupRegistration
     private const string ApprovedStartupFolderKey = @"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder";
     private const string ValueName = "WasdLolSkip";
     private const string ShortcutName = "wasdlol skip.lnk";
+    private const string TaskName = "WasdLolSkip";
     private static readonly string[] LegacyRunNames = ["!WasdLolSkip", "Unqueued"];
 
-    // Windows 11 Startup Apps: 0x02 = enabled.
+    // Windows 11 Startup Apps: 0x02 = enabled, 0x03 = disabled by the user.
     private static readonly byte[] StartupEnabled =
         [0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
 
@@ -32,9 +32,8 @@ public static class StartupRegistration
             return;
 
         var stable = EnsureLocalCopy(path);
+        RemoveLeftoverLaunchers();
         TryWriteRunKey(stable);
-        TryWriteStartupShortcut(stable);
-        TryWriteLogonTask(stable);
     }
 
     private static string EnsureLocalCopy(string runningPath)
@@ -92,66 +91,50 @@ public static class StartupRegistration
             foreach (var legacy in LegacyRunNames)
                 key.DeleteValue(legacy, throwOnMissingValue: false);
 
-            key.SetValue(ValueName, $"\"{path}\"");
-            WriteApproved(ApprovedRunKey, ValueName);
-            WriteApproved(ApprovedRunKey, "!WasdLolSkip"); // leftover name, keep enabled if present
+            key.SetValue(ValueName, $"\"{path}\" --startup");
+            WriteApprovedIfEnabled(ApprovedRunKey, ValueName);
         }
         catch
         {
         }
     }
 
-    private static void TryWriteStartupShortcut(string exePath)
+    private static void RemoveLeftoverLaunchers()
     {
         try
         {
-            var startup = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-            Directory.CreateDirectory(startup);
-            var linkPath = Path.Combine(startup, ShortcutName);
-
-            var type = Type.GetTypeFromProgID("WScript.Shell");
-            if (type is null)
-                return;
-
-            var shell = Activator.CreateInstance(type);
-            if (shell is null)
-                return;
-
-            var shortcut = type.InvokeMember(
-                "CreateShortcut",
-                BindingFlags.InvokeMethod,
-                null,
-                shell,
-                [linkPath]);
-            if (shortcut is null)
-                return;
-
-            var shortcutType = shortcut.GetType();
-            SetCom(shortcutType, shortcut, "TargetPath", exePath);
-            SetCom(shortcutType, shortcut, "WorkingDirectory", Path.GetDirectoryName(exePath) ?? "");
-            SetCom(shortcutType, shortcut, "WindowStyle", 1);
-            SetCom(shortcutType, shortcut, "Description", "wasdlol skip");
-
-            var ico = Path.Combine(Path.GetDirectoryName(exePath) ?? "", "WasdLolSkip.ico");
-            SetCom(shortcutType, shortcut, "IconLocation", File.Exists(ico) ? ico : exePath);
-
-            shortcutType.InvokeMember("Save", BindingFlags.InvokeMethod, null, shortcut, null);
-            WriteApproved(ApprovedStartupFolderKey, ShortcutName);
+            var linkPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.Startup),
+                ShortcutName);
+            if (File.Exists(linkPath))
+                File.Delete(linkPath);
         }
         catch
         {
         }
+
+        try
+        {
+            using var approved = Registry.CurrentUser.OpenSubKey(ApprovedStartupFolderKey, writable: true);
+            approved?.DeleteValue(ShortcutName, throwOnMissingValue: false);
+        }
+        catch
+        {
+        }
+
+        try
+        {
+            using var approved = Registry.CurrentUser.OpenSubKey(ApprovedRunKey, writable: true);
+            approved?.DeleteValue("!WasdLolSkip", throwOnMissingValue: false);
+        }
+        catch
+        {
+        }
+
+        TryDeleteLogonTask();
     }
 
-    private static void TryWriteLogonTask(string path)
-    {
-        // ONLOGON tasks often need elevation on Windows 11; ignore failures.
-        if (TrySchtasks(path, withDelay: true))
-            return;
-        TrySchtasks(path, withDelay: false);
-    }
-
-    private static bool TrySchtasks(string path, bool withDelay)
+    private static void TryDeleteLogonTask()
     {
         try
         {
@@ -163,39 +146,27 @@ public static class StartupRegistration
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
-            psi.ArgumentList.Add("/Create");
+            psi.ArgumentList.Add("/Delete");
             psi.ArgumentList.Add("/F");
-            psi.ArgumentList.Add("/SC");
-            psi.ArgumentList.Add("ONLOGON");
-            psi.ArgumentList.Add("/IT");
             psi.ArgumentList.Add("/TN");
-            psi.ArgumentList.Add("WasdLolSkip");
-            psi.ArgumentList.Add("/TR");
-            psi.ArgumentList.Add(path);
-            if (withDelay)
-            {
-                psi.ArgumentList.Add("/DELAY");
-                psi.ArgumentList.Add("0000:03");
-            }
+            psi.ArgumentList.Add(TaskName);
 
             using var process = Process.Start(psi);
-            if (process is null)
-                return false;
-
-            process.WaitForExit(4000);
-            return process.ExitCode == 0;
+            process?.WaitForExit(4000);
         }
         catch
         {
-            return false;
         }
     }
 
-    private static void WriteApproved(string keyPath, string name)
+    private static void WriteApprovedIfEnabled(string keyPath, string name)
     {
         try
         {
             using var key = Registry.CurrentUser.CreateSubKey(keyPath, true);
+            if (IsUserDisabled(key.GetValue(name)))
+                return;
+
             key.SetValue(name, StartupEnabled, RegistryValueKind.Binary);
         }
         catch
@@ -203,8 +174,8 @@ public static class StartupRegistration
         }
     }
 
-    private static void SetCom(Type type, object target, string property, object value) =>
-        type.InvokeMember(property, BindingFlags.SetProperty, null, target, [value]);
+    internal static bool IsUserDisabled(object? value) =>
+        value is byte[] { Length: > 0 } bytes && bytes[0] != 0x02;
 
     private static bool PathsEqual(string a, string b) =>
         string.Equals(Path.GetFullPath(a), Path.GetFullPath(b), StringComparison.OrdinalIgnoreCase);

@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Unqueued.Services;
@@ -20,7 +21,9 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             _session = new AppSession(desktop);
+            _session.ViewModel.PropertyChanged += (_, _) => SyncTrayPlay();
             _session.Start();
+            SyncTrayPlay();
         }
 
         AppIcons.ApplyTo(this);
@@ -37,4 +40,16 @@ public partial class App : Application
     private void OnPlayFromTray(object? sender, EventArgs e) => _session?.PlayFromTray();
 
     private void OnQuit(object? sender, EventArgs e) => _session?.Quit();
+
+    private void SyncTrayPlay()
+    {
+        var play = TrayIcon.GetIcons(this)?
+            .SelectMany(icon => icon.Menu?.Items ?? [])
+            .OfType<NativeMenuItem>()
+            .FirstOrDefault(item => item.Header == "Play");
+        if (play is null)
+            return;
+
+        play.IsEnabled = _session?.ViewModel.CanPlay == true;
+    }
 }

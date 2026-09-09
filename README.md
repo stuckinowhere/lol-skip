@@ -18,7 +18,7 @@ Set-ExecutionPolicy -Scope Process Bypass
 .\publish-windows.ps1
 ```
 
-That builds `publish\win-x64\WasdLolSkip.exe`, launches it, and opens the folder. Pin or leave that exe where you want it. The first time it starts, it registers a logon task plus a startup entry so it can run before Riot Client.
+That builds `publish\win-x64\WasdLolSkip.exe` and launches it. The first time it starts, it copies itself to `%LocalAppData%\WasdLolSkip` and writes one HKCU Run entry (`--startup`) so it can run before Riot Client. It does not add a scheduled task or Startup-folder shortcut.
 
 **Dev loop**
 

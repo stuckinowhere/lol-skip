@@ -5,7 +5,7 @@ namespace Unqueued.Tests;
 public class ProcessBlockerTests
 {
     [Fact]
-    public void WatchesLeagueClientProcessesOnly()
+    public void WatchesLeagueRiotAndVanguardTrayProcesses()
     {
         Assert.Equal(
         [
@@ -19,7 +19,8 @@ public class ProcessBlockerTests
             "RiotClientServices",
             "RiotClientUx",
             "RiotClientUxRender",
-            "RiotClientCrashHandler"
+            "RiotClientCrashHandler",
+            "vgtray"
         ], ProcessBlocker.ProcessNames);
     }
 
