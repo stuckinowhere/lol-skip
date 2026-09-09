@@ -2,13 +2,19 @@
 
 A Windows 11 app you run **on your PC**. It counts days without League of Legends, starts at login (ahead of typical Riot Client startup), and keeps League closed unless you Play.
 
-## Run it on your Windows 11 PC
+## Install
+
+Download the latest **win-x64 zip** from [Releases](https://github.com/stuckinowhere/lol-skip/releases), unzip it, and run `WasdLolSkip.exe`. The first launch copies itself to `%LocalAppData%\WasdLolSkip` and registers one Windows startup entry.
+
+Tagged builds look like [tgrep](https://github.com/microsoft/tgrep/releases): a `v1.0.0` tag produces a GitHub Release with `wasdlol-skip-v1.0.0-win-x64.zip` and `checksums.txt`.
+
+## Build from source
 
 1. Install the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (x64).
 2. Get this repo onto the machine (clone, or download the ZIP and unzip it).
 3. In that folder, either:
 
-**Easiest — a real `WasdLolSkip.exe` that starts with Windows**
+**Local publish — a real `WasdLolSkip.exe` that starts with Windows**
 
 Right-click `publish-windows.ps1` → **Run with PowerShell**.  
 Or from PowerShell:
@@ -51,3 +57,16 @@ The day count lives in `%AppData%\Unqueued\state.json` and **survives restarts**
 ## Design
 
 Client dark `#010A13`, bone `#F0E6D2`, gold `#C8AA6E`. House brand is **WASD** (hex + WASD keys). Reuse it from [`Brand/`](Brand/README.md). Cinzel + IBM Plex Sans (SIL OFL). Lane marks are original geometry, not Riot art.
+
+## Cutting a release
+
+After this branch is on `main`:
+
+```powershell
+git checkout main
+git pull
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+That runs `.github/workflows/release.yml`, which tests, publishes a self-contained `win-x64` exe, and creates a GitHub Release with `wasdlol-skip-v1.0.0-win-x64.zip` plus `checksums.txt`. Later versions are `v1.0.1`, `v1.1.0`, and so on.
