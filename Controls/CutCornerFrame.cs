@@ -7,7 +7,7 @@ namespace Unqueued.Controls;
 public sealed class CutCornerFrame : Decorator
 {
     public static readonly StyledProperty<IBrush?> StrokeProperty =
-        AvaloniaProperty.Register<CutCornerFrame, IBrush?>(nameof(Stroke), new SolidColorBrush(Color.Parse("#C8AA6E")));
+        AvaloniaProperty.Register<CutCornerFrame, IBrush?>(nameof(Stroke), new SolidColorBrush(Color.Parse("#0AC8B9")));
 
     public static readonly StyledProperty<IBrush?> FillProperty =
         AvaloniaProperty.Register<CutCornerFrame, IBrush?>(nameof(Fill));

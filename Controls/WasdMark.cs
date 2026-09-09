@@ -1,0 +1,129 @@
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
+
+namespace Unqueued.Controls;
+
+/// <summary>
+/// Portable WASD house mark: hex + WASD key cluster.
+/// Copy this file into other apps (wasdlol, etc.) with the Brand palette.
+/// </summary>
+public sealed class WasdMark : Control
+{
+    public static readonly StyledProperty<IBrush?> HexFillProperty =
+        AvaloniaProperty.Register<WasdMark, IBrush?>(nameof(HexFill), new SolidColorBrush(Color.Parse("#005A82")));
+
+    public static readonly StyledProperty<IBrush?> AccentProperty =
+        AvaloniaProperty.Register<WasdMark, IBrush?>(nameof(Accent), new SolidColorBrush(Color.Parse("#0AC8B9")));
+
+    public static readonly StyledProperty<IBrush?> KeyFillProperty =
+        AvaloniaProperty.Register<WasdMark, IBrush?>(nameof(KeyFill), new SolidColorBrush(Color.Parse("#0A323C")));
+
+    static WasdMark()
+    {
+        AffectsRender<WasdMark>(HexFillProperty, AccentProperty, KeyFillProperty);
+        AffectsMeasure<WasdMark>(WidthProperty, HeightProperty);
+    }
+
+    public IBrush? HexFill
+    {
+        get => GetValue(HexFillProperty);
+        set => SetValue(HexFillProperty, value);
+    }
+
+    public IBrush? Accent
+    {
+        get => GetValue(AccentProperty);
+        set => SetValue(AccentProperty, value);
+    }
+
+    public IBrush? KeyFill
+    {
+        get => GetValue(KeyFillProperty);
+        set => SetValue(KeyFillProperty, value);
+    }
+
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        var side = double.IsNaN(Width) ? 24 : Width;
+        var height = double.IsNaN(Height) ? side : Height;
+        return new Size(side, height);
+    }
+
+    public override void Render(DrawingContext context)
+    {
+        var size = Math.Min(Bounds.Width, Bounds.Height);
+        if (size <= 1)
+            return;
+
+        var cx = Bounds.Width / 2;
+        var cy = Bounds.Height / 2;
+        var radius = size / 2 - Math.Max(1.2, size * 0.04);
+        var hex = HexGeometry(cx, cy, radius);
+        context.DrawGeometry(HexFill, new Pen(Accent, Math.Max(1.1, size * 0.055)), hex);
+
+        if (size < 26)
+        {
+            DrawCompactW(context, cx, cy, radius * 0.42);
+            return;
+        }
+
+        DrawKeys(context, cx, cy, radius);
+    }
+
+    private void DrawKeys(DrawingContext context, double cx, double cy, double radius)
+    {
+        var key = radius * 0.22;
+        var gap = radius * 0.05;
+        var sY = cy + radius * 0.08;
+        var wY = sY - key - gap;
+        var aX = cx - key - gap;
+        var dX = cx + key + gap;
+
+        DrawKey(context, cx, wY, key);
+        DrawKey(context, aX, sY, key);
+        DrawKey(context, cx, sY, key);
+        DrawKey(context, dX, sY, key);
+    }
+
+    private void DrawKey(DrawingContext context, double cx, double cy, double half)
+    {
+        var rect = new Rect(cx - half, cy - half, half * 2, half * 2);
+        context.DrawRectangle(KeyFill, new Pen(Accent, Math.Max(0.8, half * 0.18)), rect, 2, 2);
+    }
+
+    private void DrawCompactW(DrawingContext context, double cx, double cy, double arm)
+    {
+        var pen = new Pen(Accent, Math.Max(1.4, arm * 0.28), lineCap: PenLineCap.Round, lineJoin: PenLineJoin.Round);
+        var geo = new StreamGeometry();
+        using (var ctx = geo.Open())
+        {
+            ctx.BeginFigure(new Point(cx - arm, cy - arm * 0.15), false);
+            ctx.LineTo(new Point(cx - arm * 0.35, cy + arm * 0.85));
+            ctx.LineTo(new Point(cx, cy + arm * 0.15));
+            ctx.LineTo(new Point(cx + arm * 0.35, cy + arm * 0.85));
+            ctx.LineTo(new Point(cx + arm, cy - arm * 0.15));
+            ctx.EndFigure(false);
+        }
+
+        context.DrawGeometry(null, pen, geo);
+    }
+
+    private static StreamGeometry HexGeometry(double cx, double cy, double radius)
+    {
+        var geometry = new StreamGeometry();
+        using var ctx = geometry.Open();
+        for (var i = 0; i < 6; i++)
+        {
+            var angle = Math.PI / 180 * (60 * i - 90);
+            var point = new Point(cx + radius * Math.Cos(angle), cy + radius * Math.Sin(angle));
+            if (i == 0)
+                ctx.BeginFigure(point, true);
+            else
+                ctx.LineTo(point);
+        }
+
+        ctx.EndFigure(true);
+        return geometry;
+    }
+}

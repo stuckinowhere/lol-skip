@@ -52,4 +52,6 @@ State lives in `%AppData%\Unqueued\state.json`.
 
 ## Design
 
-Client dark `#010A13`, bone `#F0E6D2`, gold `#C8AA6E`. Hex ring, lane marks, and shield/swords/potion glyphs are original geometry — not Riot art. Cinzel + IBM Plex Sans (SIL OFL).
+[Palette 8528](https://www.color-hex.com/color-palette/8528): mint `#0AC8B9`, teal `#0397AB`, deep `#005A82`, panel `#0A323C`, ink `#091428`.
+
+House brand is **WASD** (hex + WASD keys). Reuse it in other apps from [`Brand/`](Brand/README.md) — copy `wasd-mark.svg` / `.png` / `.ico` and `Controls/WasdMark.cs`. Cinzel + IBM Plex Sans (SIL OFL). Lane/shield marks are original geometry, not Riot art.

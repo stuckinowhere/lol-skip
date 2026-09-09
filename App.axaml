@@ -10,16 +10,23 @@
             </ResourceDictionary.MergedDictionaries>
             <FontFamily x:Key="Cinzel">avares://Unqueued/Assets/Fonts/Cinzel-Regular.ttf#Cinzel, avares://Unqueued/Assets/Fonts/Cinzel-Bold.ttf#Cinzel</FontFamily>
             <FontFamily x:Key="Plex">avares://Unqueued/Assets/Fonts/IBMPlexSans-Regular.ttf#IBM Plex Sans, avares://Unqueued/Assets/Fonts/IBMPlexSans-Medium.ttf#IBM Plex Sans</FontFamily>
-            <Color x:Key="Ink">#010A13</Color>
-            <Color x:Key="Bone">#F0E6D2</Color>
-            <Color x:Key="Gold">#C8AA6E</Color>
-            <SolidColorBrush x:Key="InkBrush" Color="{StaticResource Ink}" />
-            <SolidColorBrush x:Key="BoneBrush" Color="{StaticResource Bone}" />
-            <SolidColorBrush x:Key="GoldBrush" Color="{StaticResource Gold}" />
-            <LinearGradientBrush x:Key="GoldGradient" StartPoint="0%,0%" EndPoint="0%,100%">
-                <GradientStop Color="#F0E6D2" Offset="0" />
-                <GradientStop Color="#C8AA6E" Offset="0.55" />
-                <GradientStop Color="#785A28" Offset="1" />
+            <!-- color-hex.com/color-palette/8528 -->
+            <Color x:Key="WasdMint">#0AC8B9</Color>
+            <Color x:Key="WasdTeal">#0397AB</Color>
+            <Color x:Key="WasdDeep">#005A82</Color>
+            <Color x:Key="WasdPanel">#0A323C</Color>
+            <Color x:Key="WasdInk">#091428</Color>
+            <Color x:Key="WasdText">#E8FBFA</Color>
+            <SolidColorBrush x:Key="WasdMintBrush" Color="{StaticResource WasdMint}" />
+            <SolidColorBrush x:Key="WasdTealBrush" Color="{StaticResource WasdTeal}" />
+            <SolidColorBrush x:Key="WasdDeepBrush" Color="{StaticResource WasdDeep}" />
+            <SolidColorBrush x:Key="WasdPanelBrush" Color="{StaticResource WasdPanel}" />
+            <SolidColorBrush x:Key="WasdInkBrush" Color="{StaticResource WasdInk}" />
+            <SolidColorBrush x:Key="WasdTextBrush" Color="{StaticResource WasdText}" />
+            <LinearGradientBrush x:Key="WasdGradient" StartPoint="0%,0%" EndPoint="0%,100%">
+                <GradientStop Color="#0AC8B9" Offset="0" />
+                <GradientStop Color="#0397AB" Offset="0.55" />
+                <GradientStop Color="#005A82" Offset="1" />
             </LinearGradientBrush>
         </ResourceDictionary>
     </Application.Resources>
@@ -29,14 +36,14 @@
 
         <Style Selector="Window">
             <Setter Property="FontFamily" Value="{StaticResource Plex}" />
-            <Setter Property="Foreground" Value="{StaticResource BoneBrush}" />
-            <Setter Property="Background" Value="{StaticResource InkBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource WasdTextBrush}" />
+            <Setter Property="Background" Value="{StaticResource WasdInkBrush}" />
         </Style>
 
         <Style Selector="Button.primary">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{StaticResource BoneBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource GoldBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource WasdTextBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource WasdMintBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Padding" Value="16,13" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -47,30 +54,30 @@
             <Setter Property="CornerRadius" Value="0" />
         </Style>
         <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#16110A" />
-            <Setter Property="BorderBrush" Value="#F0E6D2" />
-            <Setter Property="Foreground" Value="#F0E6D2" />
+            <Setter Property="Background" Value="#0A323C" />
+            <Setter Property="BorderBrush" Value="#0AC8B9" />
+            <Setter Property="Foreground" Value="#E8FBFA" />
         </Style>
         <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#C8AA6E" />
-            <Setter Property="Foreground" Value="#010A13" />
+            <Setter Property="Background" Value="#005A82" />
+            <Setter Property="Foreground" Value="#E8FBFA" />
         </Style>
 
         <Style Selector="Button.quiet">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{StaticResource GoldBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource WasdMintBrush}" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="8,6" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="FontFamily" Value="{StaticResource Plex}" />
             <Setter Property="FontSize" Value="12" />
-            <Setter Property="Opacity" Value="0.75" />
+            <Setter Property="Opacity" Value="0.85" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="CornerRadius" Value="0" />
         </Style>
         <Style Selector="Button.quiet:pointerover /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="#F0E6D2" />
+            <Setter Property="Foreground" Value="#E8FBFA" />
             <Setter Property="Opacity" Value="1" />
         </Style>
 
@@ -84,14 +91,14 @@
             <Setter Property="CornerRadius" Value="0" />
         </Style>
         <Style Selector="Button.icon:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#16110A" />
+            <Setter Property="Background" Value="#0A323C" />
         </Style>
     </Application.Styles>
 
     <TrayIcon.Icons>
         <TrayIcons>
             <TrayIcon Icon="/Assets/unqueued.ico"
-                      ToolTipText="Unqueued — days without League"
+                      ToolTipText="Unqueued — a WASD app"
                       Clicked="OnTrayClicked">
                 <TrayIcon.Menu>
                     <NativeMenu>

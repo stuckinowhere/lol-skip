@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="WASD">
+  <!-- Palette 8528: #0AC8B9 #0397AB #005A82 #0A323C #091428 -->
+  <polygon points="128,18 232,78 232,178 128,238 24,178 24,78"
+           fill="#005A82" stroke="#0AC8B9" stroke-width="10" stroke-linejoin="round"/>
+  <rect x="106" y="72" width="44" height="44" rx="6" fill="#0A323C" stroke="#0AC8B9" stroke-width="4"/>
+  <rect x="62" y="122" width="44" height="44" rx="6" fill="#0A323C" stroke="#0AC8B9" stroke-width="4"/>
+  <rect x="106" y="122" width="44" height="44" rx="6" fill="#0A323C" stroke="#0AC8B9" stroke-width="4"/>
+  <rect x="150" y="122" width="44" height="44" rx="6" fill="#0A323C" stroke="#0AC8B9" stroke-width="4"/>
+</svg>

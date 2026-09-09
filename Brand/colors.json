@@ -1,0 +1,20 @@
+{
+  "name": "WASD",
+  "source": "https://www.color-hex.com/color-palette/8528",
+  "colors": {
+    "mint": "#0AC8B9",
+    "teal": "#0397AB",
+    "deep": "#005A82",
+    "panel": "#0A323C",
+    "ink": "#091428"
+  },
+  "roles": {
+    "background": "ink",
+    "surface": "panel",
+    "border": "mint",
+    "accent": "teal",
+    "highlight": "mint",
+    "fill": "deep",
+    "text": "#E8FBFA"
+  }
+}
