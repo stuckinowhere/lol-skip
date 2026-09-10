@@ -11,3 +11,4 @@ obj/
 *.DotSettings.user
 publish/
 artifacts/
+.tgrep/
