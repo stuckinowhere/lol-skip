@@ -121,7 +121,6 @@
                             Classes="quiet"
                             Margin="0,12,0,8"
                             Content="Play"
-                            IsVisible="{Binding CanPlay}"
                             Command="{Binding PlayCommand}" />
                 </Grid>
             </Grid>
