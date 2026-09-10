@@ -2,74 +2,55 @@ namespace Unqueued.Services;
 
 internal static class RiotPaths
 {
+    private static readonly string[] BlockedDirectories =
+    [
+        "Downloads",
+        "Desktop",
+        "Temp"
+    ];
+
     internal static bool IsTrustedExecutable(string? path)
     {
         if (string.IsNullOrWhiteSpace(path))
             return false;
 
-        string full;
-        try
-        {
-            full = Path.GetFullPath(path);
-        }
-        catch
-        {
-            return false;
-        }
-
-        if (!full.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
+        if (!path.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
             return false;
 
-        if (IsLooseUserFolder(full))
+        var parts = SplitAndCollapse(path);
+        if (parts.Count < 2)
             return false;
 
-        return HasDirectory(full, "Riot Games") || HasDirectory(full, "Riot Vanguard");
+        var directories = parts.Take(parts.Count - 1).ToArray();
+        if (directories.Any(IsBlockedDirectory))
+            return false;
+
+        return directories.Any(directory =>
+            directory.Equals("Riot Games", StringComparison.OrdinalIgnoreCase)
+            || directory.Equals("Riot Vanguard", StringComparison.OrdinalIgnoreCase));
     }
 
-    private static bool IsLooseUserFolder(string full)
-    {
-        foreach (var folder in LooseUserFolders())
-        {
-            if (string.IsNullOrWhiteSpace(folder))
-                continue;
+    private static bool IsBlockedDirectory(string name) =>
+        BlockedDirectories.Any(blocked => name.Equals(blocked, StringComparison.OrdinalIgnoreCase));
 
-            string root;
-            try
+    private static List<string> SplitAndCollapse(string path)
+    {
+        var parts = path.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries);
+        var stack = new List<string>();
+        foreach (var part in parts)
+        {
+            if (part is ".")
+                continue;
+            if (part is "..")
             {
-                root = Path.GetFullPath(folder).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                       + Path.DirectorySeparatorChar;
-            }
-            catch
-            {
+                if (stack.Count > 0)
+                    stack.RemoveAt(stack.Count - 1);
                 continue;
             }
 
-            if (full.StartsWith(root, StringComparison.OrdinalIgnoreCase))
-                return true;
+            stack.Add(part);
         }
 
-        return false;
-    }
-
-    private static IEnumerable<string> LooseUserFolders()
-    {
-        yield return Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) is { Length: > 0 } home
-            ? Path.Combine(home, "Downloads")
-            : "";
-        yield return Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-        yield return Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        yield return Path.GetTempPath();
-    }
-
-    private static bool HasDirectory(string full, string directoryName)
-    {
-        var parts = full.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-        for (var i = 0; i < parts.Length - 1; i++)
-        {
-            if (parts[i].Equals(directoryName, StringComparison.OrdinalIgnoreCase))
-                return true;
-        }
-
-        return false;
+        return stack;
     }
 }
