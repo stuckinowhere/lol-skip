@@ -60,6 +60,13 @@ internal static class AppVersion
 internal sealed class GitHubUpdateClient : IDisposable
 {
     public const string LatestReleaseUrl = "https://api.github.com/repos/stuckinowhere/lol-skip/releases/latest";
+    internal const int MaxReleaseJsonBytes = 256 * 1024;
+
+    private static readonly string[] AllowedHosts =
+    [
+        "github.com",
+        "www.github.com"
+    ];
 
     private readonly HttpClient _http;
     private readonly Version _current;
@@ -79,6 +86,7 @@ internal sealed class GitHubUpdateClient : IDisposable
             _ownsHttp = true;
         }
 
+        _http.MaxResponseContentBufferSize = MaxReleaseJsonBytes;
         _http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("WasdLolSkip", _current.ToString()));
         _http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
     }
@@ -89,6 +97,18 @@ internal sealed class GitHubUpdateClient : IDisposable
         {
             using var response = await _http.GetAsync(LatestReleaseUrl, cancellation).ConfigureAwait(false);
             var body = await response.Content.ReadAsStringAsync(cancellation).ConfigureAwait(false);
+            if (body.Length > MaxReleaseJsonBytes)
+            {
+                return new UpdateCheckResult(
+                    UpdateCheckStatus.Failed,
+                    _current,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "GitHub release payload was too large.");
+            }
+
             if (!response.IsSuccessStatusCode)
             {
                 return new UpdateCheckResult(
@@ -134,7 +154,7 @@ internal sealed class GitHubUpdateClient : IDisposable
                 "Latest release has no version tag.");
         }
 
-        var releaseUrl = root.TryGetProperty("html_url", out var htmlEl) ? htmlEl.GetString() : null;
+        var releaseUrl = AllowedUrl(root.TryGetProperty("html_url", out var htmlEl) ? htmlEl.GetString() : null);
         string? setupUrl = null;
         string? zipUrl = null;
         if (root.TryGetProperty("assets", out var assets) && assets.ValueKind == JsonValueKind.Array)
@@ -142,7 +162,7 @@ internal sealed class GitHubUpdateClient : IDisposable
             foreach (var asset in assets.EnumerateArray())
             {
                 var name = asset.TryGetProperty("name", out var nameEl) ? nameEl.GetString() : null;
-                var url = asset.TryGetProperty("browser_download_url", out var urlEl) ? urlEl.GetString() : null;
+                var url = AllowedUrl(asset.TryGetProperty("browser_download_url", out var urlEl) ? urlEl.GetString() : null);
                 if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(url))
                     continue;
 
@@ -166,13 +186,39 @@ internal sealed class GitHubUpdateClient : IDisposable
             null);
     }
 
-    public static void OpenUrl(string url)
+    internal static string? AllowedUrl(string? url) =>
+        IsAllowedReleaseUrl(url) ? url : null;
+
+    internal static bool IsAllowedReleaseUrl(string? url)
     {
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
+            return false;
+        if (!string.Equals(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase))
+            return false;
+        if (!string.IsNullOrEmpty(uri.UserInfo))
+            return false;
+
+        var host = uri.IdnHost;
+        if (string.IsNullOrWhiteSpace(host))
+            return false;
+
+        if (AllowedHosts.Any(allowed => host.Equals(allowed, StringComparison.OrdinalIgnoreCase)))
+            return true;
+
+        return host.EndsWith(".githubusercontent.com", StringComparison.OrdinalIgnoreCase);
+    }
+
+    public static bool OpenUrl(string url)
+    {
+        if (!IsAllowedReleaseUrl(url))
+            return false;
+
         Process.Start(new ProcessStartInfo
         {
             FileName = url,
             UseShellExecute = true
         });
+        return true;
     }
 
     public void Dispose()

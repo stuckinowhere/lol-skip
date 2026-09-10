@@ -12,11 +12,11 @@ public class UpdateCheckTests
           "assets": [
             {
               "name": "wasdlol-skip-v1.2.0-win-x64.zip",
-              "browser_download_url": "https://example.test/skip.zip"
+              "browser_download_url": "https://github.com/stuckinowhere/lol-skip/releases/download/v1.2.0/skip.zip"
             },
             {
               "name": "wasdlol-skip-v1.2.0-win-x64-setup.exe",
-              "browser_download_url": "https://example.test/skip-setup.exe"
+              "browser_download_url": "https://github.com/stuckinowhere/lol-skip/releases/download/v1.2.0/skip-setup.exe"
             }
           ]
         }
@@ -47,7 +47,7 @@ public class UpdateCheckTests
 
         Assert.Equal(UpdateCheckStatus.Available, result.Status);
         Assert.Equal(new Version(1, 2, 0, 0), result.Latest);
-        Assert.Equal("https://example.test/skip-setup.exe", result.DownloadUrl);
+        Assert.Equal("https://github.com/stuckinowhere/lol-skip/releases/download/v1.2.0/skip-setup.exe", result.DownloadUrl);
     }
 
     [Fact]
@@ -60,10 +60,42 @@ public class UpdateCheckTests
     [Fact]
     public void Parse_OlderGitHubTag_IsCurrent()
     {
-        var json = """{ "tag_name": "v1.0.0", "html_url": "https://example.test/r", "assets": [] }""";
+        var json = """{ "tag_name": "v1.0.0", "html_url": "https://github.com/stuckinowhere/lol-skip/releases/tag/v1.0.0", "assets": [] }""";
         var result = GitHubUpdateClient.Parse(json, new Version(1, 2, 0, 0));
         Assert.Equal(UpdateCheckStatus.Current, result.Status);
-        Assert.Equal("https://example.test/r", result.DownloadUrl);
+        Assert.Equal("https://github.com/stuckinowhere/lol-skip/releases/tag/v1.0.0", result.DownloadUrl);
+    }
+
+    [Theory]
+    [InlineData("https://github.com/stuckinowhere/lol-skip/releases/tag/v1.2.1", true)]
+    [InlineData("https://objects.githubusercontent.com/github-production-release-asset/foo", true)]
+    [InlineData("http://github.com/stuckinowhere/lol-skip/releases/tag/v1.2.1", false)]
+    [InlineData("javascript:alert(1)", false)]
+    [InlineData("https://evil.example/setup.exe", false)]
+    [InlineData("https://github.com.evil.test/setup.exe", false)]
+    public void ReleaseUrlsMustBeGithubHttps(string url, bool allowed) =>
+        Assert.Equal(allowed, GitHubUpdateClient.IsAllowedReleaseUrl(url));
+
+    [Fact]
+    public void Parse_DropsNonGithubAssetUrls()
+    {
+        var json = """
+            {
+              "tag_name": "v9.0.0",
+              "html_url": "https://evil.example/pwn",
+              "assets": [
+                {
+                  "name": "wasdlol-skip-v9.0.0-win-x64-setup.exe",
+                  "browser_download_url": "https://evil.example/skip-setup.exe"
+                }
+              ]
+            }
+            """;
+
+        var result = GitHubUpdateClient.Parse(json, new Version(1, 0, 0, 0));
+        Assert.Equal(UpdateCheckStatus.Available, result.Status);
+        Assert.Null(result.DownloadUrl);
+        Assert.Null(result.ReleaseUrl);
     }
 
     [Fact]

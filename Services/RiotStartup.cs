@@ -52,13 +52,13 @@ public static class RiotStartup
 
     internal static bool LooksLikeRiot(string name, string command)
     {
-        if (ContainsNeedle(name))
-            return true;
-
         if (!TrySplitCommand(command, out var file, out _))
-            return ContainsNeedle(command);
+            return false;
 
-        return ContainsNeedle(file);
+        if (!RiotPaths.IsTrustedExecutable(file))
+            return false;
+
+        return ContainsNeedle(name) || ContainsNeedle(file);
     }
 
     private static bool ContainsNeedle(string text) =>
@@ -70,6 +70,9 @@ public static class RiotStartup
             return;
 
         if (!File.Exists(file))
+            return;
+
+        if (!RiotPaths.IsTrustedExecutable(file))
             return;
 
         var exeName = Path.GetFileNameWithoutExtension(file);
