@@ -8,6 +8,8 @@ Download **`wasdlol-skip-*-win-x64-setup.exe`** from [Releases](https://github.c
 
 The installer is per-user (no admin prompt). It includes the .NET runtime, so you do **not** install the .NET SDK. It places the app in `%LocalAppData%\WasdLolSkip`, adds a Start Menu shortcut, and can start at Windows sign-in. Uninstall from **Settings → Apps**.
 
+The installed app checks [GitHub Releases](https://github.com/stuckinowhere/lol-skip/releases) for a newer version when it starts. If one exists, it offers **Download** (the setup exe). You can also choose **Check for updates** from the tray menu. It does not install the update by itself — run the new setup; uninstall/upgrade will close the running copy first.
+
 64-bit Windows 10 (1809 or later) or Windows 11.
 
 A portable zip (`wasdlol-skip-*-win-x64.zip`) is also on each release if you would rather not use Setup.
@@ -44,9 +46,9 @@ If PowerShell blocks scripts: `Set-ExecutionPolicy -Scope Process Bypass`.
 
 At login you get a gold-on-black window with the day count.
 
-- **Skip lol today** — close League / Riot Client processes, lock them until tomorrow, hide to the tray. Play is disabled for the rest of the day.
+- **Skip lol today** — close League / Riot Client processes and lock them until tomorrow. Skip and Play stay visible but disabled for the rest of the local day.
 - **Play** — no extra confirm. Allows League, and starts Riot Client / Vanguard if they are set to launch at Windows logon.
-- There is no close button. **Quit** from the tray stops protection.
+- Close the window to the tray. **Quit** from the tray stops protection.
 
 While locked it kills League and Riot Client processes if they are already running.
 
@@ -56,6 +58,7 @@ The day count lives in `%AppData%\Unqueued\state.json` and **survives restarts**
 
 - **Open** — show the window
 - **Skip lol today** / **Play** — same as the window
+- **Check for updates** — ask GitHub if a newer setup is published
 - **Quit — stops protection** — exits; League can run again
 
 ## Design

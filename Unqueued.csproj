@@ -9,7 +9,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AssemblyName>WasdLolSkip</AssemblyName>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Product>wasdlol skip</Product>
     <AssemblyTitle>wasdlol skip</AssemblyTitle>
     <Description>Count the days you are not playing League of Legends, and keep the client closed until you Play.</Description>

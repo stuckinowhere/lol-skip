@@ -14,6 +14,9 @@ public sealed class AppSession : IDisposable
     private volatile bool _listenForShow;
     private DateOnly _lastSeenDate;
     private bool _exiting;
+    private readonly GitHubUpdateClient _updates = new();
+    private int _checkingUpdates;
+    private UpdateWindow? _updateWindow;
 
     public AppSession(IClassicDesktopStyleApplicationLifetime desktop)
     {
@@ -62,6 +65,8 @@ public sealed class AppSession : IDisposable
             Name = "Unqueued.ShowListener"
         };
         _showListener.Start();
+
+        Dispatcher.UIThread.Post(() => _ = CheckForUpdatesAsync(notifyWhenCurrent: false));
     }
 
     public void ShowRitual()
@@ -111,6 +116,8 @@ public sealed class AppSession : IDisposable
             ViewModel.PlayCommand.Execute(null);
     }
 
+    public void CheckForUpdatesFromTray() => _ = CheckForUpdatesAsync(notifyWhenCurrent: true);
+
     public void Quit()
     {
         _exiting = true;
@@ -123,6 +130,58 @@ public sealed class AppSession : IDisposable
         SingleInstance.ShowEvent?.Set();
         _clock?.Stop();
         Blocker.Dispose();
+        _updates.Dispose();
+    }
+
+    private async Task CheckForUpdatesAsync(bool notifyWhenCurrent)
+    {
+        if (Interlocked.CompareExchange(ref _checkingUpdates, 1, 0) != 0)
+            return;
+
+        try
+        {
+            var result = await _updates.CheckAsync().ConfigureAwait(true);
+            if (_exiting)
+                return;
+
+            if (result.Status == UpdateCheckStatus.Current && !notifyWhenCurrent)
+                return;
+
+            await Dispatcher.UIThread.InvokeAsync(() => ShowUpdateResult(result));
+        }
+        catch
+        {
+            if (!notifyWhenCurrent)
+                return;
+
+            await Dispatcher.UIThread.InvokeAsync(() => ShowUpdateResult(new UpdateCheckResult(
+                UpdateCheckStatus.Failed,
+                AppVersion.Current,
+                null,
+                null,
+                null,
+                null,
+                "Could not check for updates.")));
+        }
+        finally
+        {
+            Interlocked.Exchange(ref _checkingUpdates, 0);
+        }
+    }
+
+    private void ShowUpdateResult(UpdateCheckResult result)
+    {
+        if (_updateWindow is { IsVisible: true })
+        {
+            _updateWindow.Activate();
+            return;
+        }
+
+        _updateWindow = new UpdateWindow(result);
+        _updateWindow.Closed += (_, _) => _updateWindow = null;
+        _updateWindow.Show();
+        NativeWindowIcon.Apply(_updateWindow);
+        _updateWindow.Activate();
     }
 
     private void ListenForShowRequests()
