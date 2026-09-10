@@ -39,6 +39,8 @@ public partial class App : Application
 
     private void OnPlayFromTray(object? sender, EventArgs e) => _session?.PlayFromTray();
 
+    private void OnCheckForUpdates(object? sender, EventArgs e) => _session?.CheckForUpdatesFromTray();
+
     private void OnQuit(object? sender, EventArgs e) => _session?.Quit();
 
     private void SyncTrayActions()

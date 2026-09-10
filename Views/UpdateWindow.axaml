@@ -1,0 +1,65 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Unqueued.Controls"
+        x:Class="Unqueued.Views.UpdateWindow"
+        Icon="/Assets/unqueued.png"
+        Title="wasdlol skip"
+        Width="380"
+        Height="280"
+        CanResize="False"
+        SystemDecorations="None"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        TransparencyBackgroundFallback="#010A13"
+        ShowInTaskbar="True">
+
+    <controls:CutCornerFrame x:Name="Shell"
+                             CutSize="16"
+                             StrokeThickness="1.4"
+                             Stroke="#C8AA6E"
+                             Fill="#010A13"
+                             PointerPressed="OnChromePointerPressed">
+        <controls:CutCornerFrame Margin="8"
+                                 CutSize="10"
+                                 StrokeThickness="0.7"
+                                 Stroke="#C8AA6E"
+                                 Fill="#070B12"
+                                 ShowCornerMarks="False">
+            <Grid RowDefinitions="Auto,*,Auto" Margin="20,16,20,18">
+                <TextBlock x:Name="Eyebrow"
+                           Text="UPDATE"
+                           FontFamily="{StaticResource Plex}"
+                           FontSize="11"
+                           LetterSpacing="2.4"
+                           Foreground="#C8AA6E"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center" />
+
+                <TextBlock x:Name="Body"
+                           Grid.Row="1"
+                           Margin="4,18,4,12"
+                           Text="A newer version is available."
+                           FontFamily="{StaticResource Plex}"
+                           FontSize="14"
+                           LineHeight="22"
+                           Foreground="#F0E6D2"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center" />
+
+                <StackPanel Grid.Row="2" Spacing="8">
+                    <Button x:Name="PrimaryButton"
+                            Classes="primary"
+                            Content="Download"
+                            Click="OnPrimaryClick" />
+                    <Button x:Name="LaterButton"
+                            Classes="quiet"
+                            Content="Later"
+                            Click="OnLaterClick" />
+                </StackPanel>
+            </Grid>
+        </controls:CutCornerFrame>
+    </controls:CutCornerFrame>
+</Window>

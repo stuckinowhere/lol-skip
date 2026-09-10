@@ -217,6 +217,7 @@
                         <NativeMenuItem Header="Open" Click="OnOpenRitual" />
                         <NativeMenuItem Header="Skip lol today" Click="OnSkipFromTray" />
                         <NativeMenuItem Header="Play" Click="OnPlayFromTray" />
+                        <NativeMenuItem Header="Check for updates" Click="OnCheckForUpdates" />
                         <NativeMenuItemSeparator />
                         <NativeMenuItem Header="Quit — stops protection" Click="OnQuit" />
                     </NativeMenu>
