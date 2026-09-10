@@ -101,12 +101,14 @@ public sealed class AppSession : IDisposable
 
     public void SkipFromTray()
     {
-        ViewModel.SkipTodayCommand.Execute(null);
+        if (ViewModel.SkipTodayCommand.CanExecute(null))
+            ViewModel.SkipTodayCommand.Execute(null);
     }
 
     public void PlayFromTray()
     {
-        ViewModel.PlayCommand.Execute(null);
+        if (ViewModel.PlayCommand.CanExecute(null))
+            ViewModel.PlayCommand.Execute(null);
     }
 
     public void Quit()

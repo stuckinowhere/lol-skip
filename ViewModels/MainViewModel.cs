@@ -25,20 +25,23 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty] private int _streakDays;
     [ObservableProperty] private string _eyebrow = "DAYS WITHOUT LOL";
     [ObservableProperty] private bool _canPlay;
+    [ObservableProperty] private bool _canSkip = true;
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanSkipToday))]
     private void SkipToday()
     {
+        if (!CanSkipToday())
+            return;
+
         _store.Skip();
         _session?.LockLeague();
         Refresh();
-        _session?.HideToTray();
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanPlayToday))]
     private void Play()
     {
-        if (!_store.CanPlay)
+        if (!CanPlayToday())
             return;
 
         _store.Pass();
@@ -54,6 +57,17 @@ public partial class MainViewModel : ViewModelBase
     {
         StreakDays = _store.StreakDays;
         CanPlay = _store.CanPlay;
-        Eyebrow = _store.IsAllowed ? "PLAYING TODAY" : "DAYS WITHOUT LOL";
+        CanSkip = CanSkipToday();
+        Eyebrow = _store.HasSkippedToday
+            ? "LOCKED UNTIL TOMORROW"
+            : _store.IsAllowed
+                ? "PLAYING TODAY"
+                : "DAYS WITHOUT LOL";
+        SkipTodayCommand.NotifyCanExecuteChanged();
+        PlayCommand.NotifyCanExecuteChanged();
     }
+
+    private bool CanSkipToday() => !_store.HasSkippedToday;
+
+    private bool CanPlayToday() => _store.CanPlay;
 }

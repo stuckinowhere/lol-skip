@@ -3,7 +3,7 @@
 ; Per-user, no admin. Installs to %LocalAppData%\WasdLolSkip.
 
 #ifndef MyAppVersion
-  #define MyAppVersion "1.0.0"
+  #define MyAppVersion "1.1.0"
 #endif
 #ifndef PublishDir
   #define PublishDir "..\publish\win-x64"
@@ -39,7 +39,7 @@ PrivilegesRequired=lowest
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 MinVersion=10.0.17763
-CloseApplications=yes
+CloseApplications=force
 CloseApplicationsFilter=WasdLolSkip.exe
 RestartApplications=no
 UsedUserAreasWarning=no
@@ -72,6 +72,15 @@ Type: files; Name: "{app}\WasdLolSkip.ico"
 Type: dirifempty; Name: "{app}"
 
 [Code]
+procedure KillWasdLolSkip;
+var
+  ResultCode: Integer;
+begin
+  { CloseApplications applies to Setup only; tray apps survive uninstall without this. }
+  Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM WasdLolSkip.exe /T', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Sleep(800);
+end;
+
 function InitializeSetup(): Boolean;
 begin
   Result := True;
@@ -80,4 +89,17 @@ begin
     MsgBox('wasdlol skip requires 64-bit Windows 10 (1809 or later) or Windows 11.', mbError, MB_OK);
     Result := False;
   end;
+end;
+
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+begin
+  KillWasdLolSkip;
+  Result := '';
+end;
+
+function InitializeUninstall(): Boolean;
+begin
+  KillWasdLolSkip;
+  RegDeleteValue(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', 'WasdLolSkip');
+  Result := True;
 end;

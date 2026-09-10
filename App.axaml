@@ -84,6 +84,14 @@
             <Setter Property="Background" Value="#785A28" />
             <Setter Property="Foreground" Value="#F0E6D2" />
         </Style>
+        <Style Selector="Button.primary:disabled">
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Opacity" Value="0.55" />
+        </Style>
+        <Style Selector="Button.primary:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#3A3018" />
+            <Setter Property="Foreground" Value="#785A28" />
+        </Style>
 
         <Style Selector="Button.quiet">
             <Setter Property="Background" Value="Transparent" />
@@ -108,6 +116,13 @@
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="#F0E6D2" />
             <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="Button.quiet:disabled">
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Opacity" Value="0.4" />
+        </Style>
+        <Style Selector="Button.quiet:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="#785A28" />
         </Style>
 
         <Style Selector="Button.caption">

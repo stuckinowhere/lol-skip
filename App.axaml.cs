@@ -21,9 +21,9 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             _session = new AppSession(desktop);
-            _session.ViewModel.PropertyChanged += (_, _) => SyncTrayPlay();
+            _session.ViewModel.PropertyChanged += (_, _) => SyncTrayActions();
             _session.Start();
-            SyncTrayPlay();
+            SyncTrayActions();
         }
 
         AppIcons.ApplyTo(this);
@@ -41,15 +41,20 @@ public partial class App : Application
 
     private void OnQuit(object? sender, EventArgs e) => _session?.Quit();
 
-    private void SyncTrayPlay()
+    private void SyncTrayActions()
     {
-        var play = TrayIcon.GetIcons(this)?
+        var items = TrayIcon.GetIcons(this)?
             .SelectMany(icon => icon.Menu?.Items ?? [])
             .OfType<NativeMenuItem>()
-            .FirstOrDefault(item => item.Header == "Play");
-        if (play is null)
+            .ToList();
+        if (items is null)
             return;
 
-        play.IsEnabled = _session?.ViewModel.CanPlay == true;
+        var skip = items.FirstOrDefault(item => item.Header == "Skip lol today");
+        var play = items.FirstOrDefault(item => item.Header == "Play");
+        if (skip is not null)
+            skip.IsEnabled = _session?.ViewModel.CanSkip == true;
+        if (play is not null)
+            play.IsEnabled = _session?.ViewModel.CanPlay == true;
     }
 }
