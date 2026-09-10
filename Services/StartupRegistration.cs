@@ -46,38 +46,53 @@ public static class StartupRegistration
             Directory.CreateDirectory(dir);
 
             var dest = Path.Combine(dir, "WasdLolSkip.exe");
-            if (!PathsEqual(runningPath, dest))
+            CopyIfMissing(runningPath, dest);
+            if (!PathsEqual(runningPath, dest) && File.Exists(dest))
             {
-                try
-                {
-                    File.Copy(runningPath, dest, overwrite: true);
-                }
-                catch (IOException)
-                {
-                    if (!File.Exists(dest))
-                        return runningPath;
-                }
-
-                var icoSource = Path.Combine(Path.GetDirectoryName(runningPath) ?? "", "WasdLolSkip.ico");
-                if (!File.Exists(icoSource))
-                    icoSource = Path.Combine(Path.GetDirectoryName(runningPath) ?? "", "unqueued.ico");
-                if (File.Exists(icoSource))
-                {
-                    try
-                    {
-                        File.Copy(icoSource, Path.Combine(dir, "WasdLolSkip.ico"), overwrite: true);
-                    }
-                    catch (IOException)
-                    {
-                    }
-                }
+                TryCopyIcon(runningPath, dir, overwrite: false);
+                return dest;
             }
 
+            TryCopyIcon(runningPath, dir, overwrite: true);
             return File.Exists(dest) ? dest : runningPath;
         }
         catch
         {
             return runningPath;
+        }
+    }
+
+    internal static bool CopyIfMissing(string runningPath, string dest)
+    {
+        if (PathsEqual(runningPath, dest) || File.Exists(dest))
+            return false;
+
+        var dir = Path.GetDirectoryName(dest);
+        if (!string.IsNullOrEmpty(dir))
+            Directory.CreateDirectory(dir);
+
+        File.Copy(runningPath, dest, overwrite: false);
+        return true;
+    }
+
+    private static void TryCopyIcon(string runningPath, string dir, bool overwrite)
+    {
+        var destIco = Path.Combine(dir, "WasdLolSkip.ico");
+        if (!overwrite && File.Exists(destIco))
+            return;
+
+        var icoSource = Path.Combine(Path.GetDirectoryName(runningPath) ?? "", "WasdLolSkip.ico");
+        if (!File.Exists(icoSource))
+            icoSource = Path.Combine(Path.GetDirectoryName(runningPath) ?? "", "unqueued.ico");
+        if (!File.Exists(icoSource))
+            return;
+
+        try
+        {
+            File.Copy(icoSource, destIco, overwrite);
+        }
+        catch (IOException)
+        {
         }
     }
 

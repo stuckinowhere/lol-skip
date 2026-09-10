@@ -37,9 +37,10 @@ public class RiotStartupTests
     }
 
     [Theory]
-    [InlineData("Riot Client", @"C:\Windows\notepad.exe", true)]
+    [InlineData("Riot Client", @"C:\Windows\notepad.exe", false)]
     [InlineData("Steam", @"C:\Program Files\Steam\steam.exe", false)]
     [InlineData("Helper", @"C:\Program Files\Riot Games\Riot Client\RiotClientServices.exe", true)]
-    public void LooksLikeRiot_UsesNameOrExecutable(string name, string command, bool expected) =>
+    [InlineData("Riot Client", @"C:\Program Files\Riot Games\Riot Client\RiotClientServices.exe", true)]
+    public void LooksLikeRiot_RequiresTrustedInstallPath(string name, string command, bool expected) =>
         Assert.Equal(expected, RiotStartup.LooksLikeRiot(name, command));
 }

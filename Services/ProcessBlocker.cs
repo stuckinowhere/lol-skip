@@ -66,6 +66,19 @@ public sealed class ProcessBlocker : IDisposable
             {
                 try
                 {
+                    string? image;
+                    try
+                    {
+                        image = process.MainModule?.FileName;
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+
+                    if (!RiotPaths.IsTrustedExecutable(image))
+                        continue;
+
                     process.Kill(entireProcessTree: true);
                 }
                 catch

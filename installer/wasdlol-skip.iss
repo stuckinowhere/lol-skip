@@ -3,7 +3,7 @@
 ; Per-user, no admin. Installs to %LocalAppData%\WasdLolSkip.
 
 #ifndef MyAppVersion
-  #define MyAppVersion "1.2.1"
+  #define MyAppVersion "1.2.2"
 #endif
 #ifndef PublishDir
   #define PublishDir "..\publish\win-x64"

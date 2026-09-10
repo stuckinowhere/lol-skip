@@ -9,7 +9,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AssemblyName>WasdLolSkip</AssemblyName>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <Authors>stuckinowhere</Authors>
     <Company>stuckinowhere</Company>
     <Copyright>Copyright (c) 2026 stuckinowhere</Copyright>
