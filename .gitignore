@@ -12,3 +12,7 @@ obj/
 publish/
 artifacts/
 .tgrep/
+
+# Local Cursor / machine (do not commit)
+*.code-workspace
+.claude/settings.local.json
