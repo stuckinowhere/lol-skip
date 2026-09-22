@@ -81,15 +81,6 @@ public sealed class StreakStore
         }
     }
 
-    public DateOnly StreakOrigin
-    {
-        get
-        {
-            lock (_gate)
-                return State.LastPassDate?.AddDays(1) ?? State.InstallDate;
-        }
-    }
-
     public void LoadOrCreate()
     {
         lock (_gate)
@@ -119,17 +110,11 @@ public sealed class StreakStore
         }
     }
 
-    public void CheckIn()
-    {
-        Skip();
-    }
-
     public void Skip()
     {
         lock (_gate)
         {
             State.LastSkipDate = Today;
-            State.LastCheckInDate = Today;
             State.AllowedUntil = null;
             SaveUnlocked();
         }
@@ -147,7 +132,6 @@ public sealed class StreakStore
             var local = _time.GetLocalNow();
             var midnight = new DateTimeOffset(local.Date.AddDays(1), local.Offset);
             State.LastPassDate = Today;
-            State.LastCheckInDate = Today;
             State.AllowedUntil = midnight;
             SaveUnlocked();
         }
@@ -163,12 +147,6 @@ public sealed class StreakStore
 
         if (expired)
             Changed?.Invoke();
-    }
-
-    public void Save()
-    {
-        lock (_gate)
-            SaveUnlocked();
     }
 
     private void SaveUnlocked()

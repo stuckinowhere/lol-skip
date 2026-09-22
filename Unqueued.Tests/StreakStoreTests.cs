@@ -18,17 +18,16 @@ public class StreakStoreTests
     }
 
     [Fact]
-    public void CheckIn_KeepsBlocked_AndMarksDecided()
+    public void Skip_KeepsBlocked_AndMarksDecided()
     {
         var (store, _) = NewStore(new DateTimeOffset(2026, 9, 9, 9, 0, 0, TimeSpan.Zero));
         store.LoadOrCreate();
-        store.CheckIn();
+        store.Skip();
 
         Assert.True(store.HasDecidedToday);
         Assert.True(store.HasSkippedToday);
         Assert.False(store.CanPlay);
         Assert.True(store.IsBlocked);
-        Assert.Equal(new DateOnly(2026, 9, 9), store.State.LastCheckInDate);
         Assert.Equal(new DateOnly(2026, 9, 9), store.State.LastSkipDate);
         Assert.Null(store.State.LastPassDate);
         Assert.Null(store.State.AllowedUntil);
