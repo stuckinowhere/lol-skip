@@ -18,7 +18,9 @@ Not Riot art. Hex + WASD keys, colored from the gold-on-ink palette.
 
 - `wasd-mark.svg` — source
 - `wasd-mark.png` / `wasd-mark.ico` — app and tray
-- `../Controls/WasdMark.cs` — Avalonia control (hex + keys, compact W under 26px)
+- `../Controls/WasdMark.cs` — Avalonia control (hex + L)
 - `colors.json` — tokens
+
+The SVG kit stays keys; the Avalonia control is L.
 
 In another app, set the window background to ink, strokes to gold, and drop `<WasdMark Width="22" Height="22"/>` in the chrome.

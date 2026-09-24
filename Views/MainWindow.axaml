@@ -48,8 +48,7 @@
                                            Height="26"
                                            VerticalAlignment="Center"
                                            HexFill="#010A13"
-                                           Accent="#C8AA6E"
-                                           KeyFill="#16110A" />
+                                           Accent="#C8AA6E" />
                         <TextBlock Text="wasdlol skip"
                                    FontFamily="{StaticResource Plex}"
                                    FontSize="14"

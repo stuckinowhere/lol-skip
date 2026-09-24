@@ -5,7 +5,7 @@ using Avalonia.Media;
 namespace Unqueued.Controls;
 
 /// <summary>
-/// Portable WASD house mark: hex + WASD key cluster.
+/// Portable WASD house mark: hex + L.
 /// Copy this file into other apps (wasdlol, etc.) with the Brand palette.
 /// </summary>
 public sealed class WasdMark : Control
@@ -16,12 +16,9 @@ public sealed class WasdMark : Control
     public static readonly StyledProperty<IBrush?> AccentProperty =
         AvaloniaProperty.Register<WasdMark, IBrush?>(nameof(Accent), new SolidColorBrush(Color.Parse("#C8AA6E")));
 
-    public static readonly StyledProperty<IBrush?> KeyFillProperty =
-        AvaloniaProperty.Register<WasdMark, IBrush?>(nameof(KeyFill), new SolidColorBrush(Color.Parse("#16110A")));
-
     static WasdMark()
     {
-        AffectsRender<WasdMark>(HexFillProperty, AccentProperty, KeyFillProperty);
+        AffectsRender<WasdMark>(HexFillProperty, AccentProperty);
         AffectsMeasure<WasdMark>(WidthProperty, HeightProperty);
     }
 
@@ -35,12 +32,6 @@ public sealed class WasdMark : Control
     {
         get => GetValue(AccentProperty);
         set => SetValue(AccentProperty, value);
-    }
-
-    public IBrush? KeyFill
-    {
-        get => GetValue(KeyFillProperty);
-        set => SetValue(KeyFillProperty, value);
     }
 
     protected override Size MeasureOverride(Size availableSize)
