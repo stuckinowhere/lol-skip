@@ -10,10 +10,8 @@
             <Color x:Key="Ink">#010A13</Color>
             <Color x:Key="Bone">#F0E6D2</Color>
             <Color x:Key="Gold">#C8AA6E</Color>
-            <SolidColorBrush x:Key="InkBrush" Color="{StaticResource Ink}" />
             <SolidColorBrush x:Key="BoneBrush" Color="{StaticResource Bone}" />
             <SolidColorBrush x:Key="GoldBrush" Color="{StaticResource Gold}" />
-            <CornerRadius x:Key="OverlayCornerRadius">0</CornerRadius>
             <LinearGradientBrush x:Key="GoldGradient" StartPoint="0%,0%" EndPoint="0%,100%">
                 <GradientStop Color="#F0E6D2" Offset="0" />
                 <GradientStop Color="#C8AA6E" Offset="0.55" />
