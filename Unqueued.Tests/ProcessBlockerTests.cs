@@ -40,7 +40,6 @@ public class ProcessBlockerTests
 
         using var blocker = new ProcessBlocker(() => true);
         blocker.Start();
-        blocker.Stop();
     }
 
     [Theory]

@@ -39,7 +39,7 @@ public sealed class ProcessBlocker : IDisposable
         _timer ??= new Timer(_ => Tick(), null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
     }
 
-    public void Stop()
+    private void Stop()
     {
         _timer?.Dispose();
         _timer = null;
