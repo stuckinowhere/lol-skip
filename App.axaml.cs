@@ -13,7 +13,6 @@ public partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
-        AppIcons.ApplyTo(this);
     }
 
     public override void OnFrameworkInitializationCompleted()

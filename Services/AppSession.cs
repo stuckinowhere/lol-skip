@@ -28,13 +28,13 @@ public sealed class AppSession : IDisposable
         _lastSeenDate = Store.Today;
     }
 
-    public StreakStore Store { get; }
+    private StreakStore Store { get; }
 
-    public ProcessBlocker Blocker { get; }
+    private ProcessBlocker Blocker { get; }
 
     public MainViewModel ViewModel { get; }
 
-    public MainWindow? Window { get; private set; }
+    private MainWindow? Window { get; set; }
 
     public void Start()
     {
@@ -198,8 +198,7 @@ public sealed class AppSession : IDisposable
     }
 
     private static bool LaunchedAtWindowsSignIn() =>
-        Environment.GetCommandLineArgs().Any(argument =>
-            string.Equals(argument, SingleInstance.StartupArgument, StringComparison.OrdinalIgnoreCase));
+        Program.IsStartupLaunch(Environment.GetCommandLineArgs());
 
     private void HideOnceOpened(object? sender, EventArgs e)
     {
