@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
-using Avalonia.Threading;
 
 namespace Unqueued;
 
@@ -46,14 +45,5 @@ internal static class AppIcons
         var icon = Load();
         if (icon is not null)
             window.Icon = icon;
-    }
-
-    public static void RetryTray(Application app)
-    {
-        var delays = new[] { 400, 1000, 2500, 5000 };
-        foreach (var delay in delays)
-        {
-            DispatcherTimer.RunOnce(() => ApplyTo(app), TimeSpan.FromMilliseconds(delay));
-        }
     }
 }

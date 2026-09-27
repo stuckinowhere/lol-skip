@@ -1,6 +1,5 @@
 using System.Runtime.InteropServices;
 using Avalonia.Controls;
-using Avalonia.Threading;
 
 namespace Unqueued;
 
@@ -23,13 +22,10 @@ internal static class NativeWindowIcon
         if (!OperatingSystem.IsWindows())
             return;
 
-        void ApplyNow() => Apply(window);
+        window.Opened += (_, _) => Apply(window);
 
-        window.Opened += (_, _) => ApplyNow();
-        ApplyNow();
-
-        foreach (var delay in new[] { 300, 1000, 2500, 6000 })
-            DispatcherTimer.RunOnce(ApplyNow, TimeSpan.FromMilliseconds(delay));
+        if (window.TryGetPlatformHandle()?.Handle is { } hwnd && hwnd != IntPtr.Zero)
+            Apply(window);
     }
 
     public static void Apply(Window window)
