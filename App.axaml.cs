@@ -26,7 +26,6 @@ public partial class App : Application
         }
 
         AppIcons.ApplyTo(this);
-        AppIcons.RetryTray(this);
         base.OnFrameworkInitializationCompleted();
     }
 
