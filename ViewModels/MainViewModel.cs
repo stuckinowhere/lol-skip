@@ -4,7 +4,7 @@ using Unqueued.Services;
 
 namespace Unqueued.ViewModels;
 
-public partial class MainViewModel : ViewModelBase
+public partial class MainViewModel : ObservableObject
 {
     private readonly StreakStore _store;
     private readonly AppSession? _session;
