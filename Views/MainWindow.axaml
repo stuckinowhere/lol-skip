@@ -46,9 +46,7 @@
                                 Margin="0,0,56,0">
                         <controls:WasdMark Width="26"
                                            Height="26"
-                                           VerticalAlignment="Center"
-                                           HexFill="#010A13"
-                                           Accent="#C8AA6E" />
+                                           VerticalAlignment="Center" />
                         <TextBlock Text="wasdlol skip"
                                    FontFamily="{StaticResource Plex}"
                                    FontSize="14"
