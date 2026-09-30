@@ -29,9 +29,7 @@ public sealed class StreakStore
 
     public event Action? Changed;
 
-    public DateTime Now => _time.GetLocalNow().LocalDateTime;
-
-    public DateOnly Today => DateOnly.FromDateTime(Now);
+    public DateOnly Today => DateOnly.FromDateTime(_time.GetLocalNow().LocalDateTime);
 
     public bool IsAllowed
     {

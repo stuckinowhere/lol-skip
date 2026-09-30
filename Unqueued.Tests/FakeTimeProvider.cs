@@ -1,5 +1,3 @@
-using Unqueued.Services;
-
 namespace Unqueued.Tests;
 
 public sealed class FakeTimeProvider : TimeProvider

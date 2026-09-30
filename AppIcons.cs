@@ -6,7 +6,7 @@ namespace Unqueued;
 
 internal static class AppIcons
 {
-    public static WindowIcon? Load()
+    private static WindowIcon? Load()
     {
         try
         {
